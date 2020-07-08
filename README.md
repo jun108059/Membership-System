@@ -27,7 +27,7 @@
 - NGINX Open Source 1.18.0
 - MySQL 5.7.30
 - PHP 7.3.18
-- PHPMyAdmin 5.0.2
+- HeidiSQL 11.0.0
 - ImageMagick 6.9.8
 - SQLite 3.32.1
 - PhpStorm 2020.1.2
