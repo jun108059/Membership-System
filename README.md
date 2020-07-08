@@ -10,9 +10,8 @@
 ## 🧮 공부 방향
 
 ### 1. 게시판 만들기
-- PHP + Nginx + MySQL 연동해보기  
-  - `Bitnami`나 기존 `WAMP`, `Xampp`로 테스트하면 쉬움  
-  - 처음부터 해보려고
+- PHP + Nginx + MySQL  
+  - `Bitnami Nginx Open Source` 활용
 - 게시판에 관리자 `CRUD` 구현
   
 ### 2. OpenAPI & XML 데이터 활용
@@ -24,9 +23,11 @@
 
 ## 🧱 개발 환경
 
-- PHP 7.4.7
-- Nginx 1.18.0
-- MySQL 8.0.20
 - Windows10
-- PHP Storm
-
+- NGINX Open Source 1.18.0
+- MySQL 5.7.30
+- PHP 7.3.18
+- PHPMyAdmin 5.0.2
+- ImageMagick 6.9.8
+- SQLite 3.32.1
+- PhpStorm 2020.1.2
