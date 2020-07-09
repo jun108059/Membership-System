@@ -1,4 +1,10 @@
-# 🐱‍👓 Bulletin-board
+# 🐱‍👓 PHP membership system
+![HTML](https://img.shields.io/badge/-HTML-orange?logo=HTML5)
+![CSS](https://img.shields.io/badge/-CSS-blue?logo=CSS3)
+![JS](https://img.shields.io/badge/-JavaScript-CC9900?logo=JavaScript)
+![PHP](https://img.shields.io/badge/-PHP-9B59B6?logo=PHP)
+![MySQL](https://img.shields.io/badge/-MySQL-85C1E9?logo=MySQL)
+![Nginx](https://img.shields.io/badge/-NGINX-green?logo=NGINX)
 
 > **🏁 목표**  
 > 1. 프레임워크 없이  
@@ -13,13 +19,23 @@
 
 ## 🧮 공부 방향
 
+✔ 필요한 지식
+
+- [Web Client Side 공부](https://github.com/jun108059/Web-Study/tree/master/Client-side)
+- [Web Server Side 공부](https://github.com/jun108059/Web-Study)
+
 ### 1. 게시판 만들기
 [게시판 php file](bulletin-board)
 - PHP + Nginx + MySQL  
   - Nginx Stack 공부
 - 게시판에 관리자 `CRUD` 구현
-  
+
+---
+
 ### 2. 멤버십 기능 구현
+
+[멤버십 기능 구현](membership)
+
   - **사용자**
     - 회원가입
     - 로그인 + 로그아웃
@@ -32,7 +48,7 @@
     - 정보 상세보기
     - 회원 강제 탈퇴
 
-
+---
 
 ## 🧱 개발 환경
 
