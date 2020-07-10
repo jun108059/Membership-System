@@ -6,6 +6,9 @@
 ![MySQL](https://img.shields.io/badge/-MySQL-85C1E9?logo=MySQL)
 ![Nginx](https://img.shields.io/badge/-NGINX-green?logo=NGINX)
 
+<a href="https://hits.seeyoufarm.com"/><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fjun108059%2FMembership-System"/></a>
+
+
 > **🏁 목표**  
 > 1. 프레임워크 없이  
 > 2. 기본적인 구조부터 이해하고
@@ -58,3 +61,8 @@
 - PHP 7.3.18
 - HeidiSQL 11.0.0
 - PhpStorm 2020.1.2
+
+---
+
+
+
