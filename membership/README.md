@@ -29,7 +29,18 @@
 
 ---
 
-## 2. DB Table 설계
+## 2. WebSite FlowChart
+
+### ✔️사용자 Web page
+
+![img](img/Web-Users.PNG)
+
+### ✔️관리자 Web page
+
+![img](img/Web-Admin.PNG)
+
+
+## 3. DB Table 설계
 
 **멤버십 Table 구성 정보**  
 `id`, `비밀번호`, `이름`, `생년월일`, `이메일`, `휴대폰번호`, `주소`
