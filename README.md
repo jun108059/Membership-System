@@ -55,6 +55,12 @@
 
 ---
 
+## 🎉 기술 스택
+
+![img](/membership/img/devStack.PNG)
+
+---
+
 ## 🧱 개발 환경
 
 - Windows10
