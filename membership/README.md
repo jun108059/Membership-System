@@ -54,6 +54,7 @@
 ## 3. WBS
 Work Breakdown Structure 작성
 
+![img](img/WBS.png)
 
 ---
 
