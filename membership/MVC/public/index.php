@@ -28,10 +28,8 @@ $url = $_SERVER['QUERY_STRING'];
 
 if ($router->match($url)) {
     echo '<pre>';
-    var_dump($router->getRoutes());
+    var_dump($router->getParams());
     echo '</pre>';
 }else {
     echo "No route found for URL '$url'";
 }
-
-
