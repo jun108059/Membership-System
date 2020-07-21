@@ -5,12 +5,22 @@
 
 // echo 'Hello from the public folder!"'.$_SERVER['QUERY_STRING'].'"';
 
+/* namespace + autoload 활용 -> 코드 삭제
 // Controller class
 require_once '../App/Controllers/Posts.php';
 // Routing
 require_once '../Core/Router.php';
+*/
 
-$router = new Router();
+spl_autoload_register(function ($class){
+    $root = dirname(__DIR__); // 부모 directory 저장
+    $file = $root . '/' . str_replace('\\', '/', $class) . '.php';
+    if (is_readable($file)) {
+        require $root . '/' . str_replace('\\', '/', $class) . '.php';
+    }
+});
+
+$router = new Core\Router(); // namespace 적용
 
 // Add the routes
 $router->add('', ['controller' => 'Home', 'action' => 'index']);

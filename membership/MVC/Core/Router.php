@@ -1,5 +1,7 @@
 <?php
 
+namespace Core;
+
 class Router
 {
 
@@ -87,8 +89,10 @@ class Router
     {
         if ($this->match($url)) { // 라우팅 table 과 일치 하는 경우
             $controller = $this->params['controller'];
-            $controller = $this->convertToStudlyCaps($controller);
             // class naming 컨벤션 - Studly Caps
+            $controller = $this->convertToStudlyCaps($controller);
+            // namespace 추가
+            $controller = "App\Controllers\\$controller";
 
             if (class_exists($controller)) { // class 가 존재 하는 경우
                 $controller_object = new $controller();
