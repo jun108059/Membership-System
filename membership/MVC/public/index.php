@@ -5,9 +5,9 @@
 
 // echo 'Hello from the public folder!"'.$_SERVER['QUERY_STRING'].'"';
 
-/**
- * Routing
- */
+// Controller class
+require_once '../App/Controllers/Posts.php';
+// Routing
 require_once '../Core/Router.php';
 
 $router = new Router();
@@ -19,6 +19,7 @@ $router->add('{controller}/{action}');
 $router->add('{controller}/{id:\d+}/{action}');
 $router->add('admin/{action}/{controller}');
 
+/* dispatch 함수를 통해 일치 여부 검사 (삭제)
 // Display the routing table
 echo '<pre>';
 //var_dump($router->getRoutes());
@@ -35,3 +36,14 @@ if ($router->match($url)) {
 } else {
     echo "No route found for URL '$url'";
 }
+*/
+
+$router->dispatch($_SERVER['QUERY_STRING']);
+
+/*************라우팅 vs dispatch************/
+// 1. routing : asking for directions
+// 2. dispatching : following those directions
+
+// controller object 생성 -> action method 실행
+// 클래스 - StudlyCaps (PSR1)
+// 메소드 - camelCase
