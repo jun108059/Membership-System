@@ -43,11 +43,16 @@ class Home extends \Core\Controller
     {
         // index action in the Home controller
         // View 렌더링 추가!
+        /*
         View::render('Home/index.php', [
             'name'    => 'Dave',
             'colours' => ['red', 'green', 'blue']
         ]);
-
+        */
+        View::renderTemplate('Home/index.html', [
+            'name'    => 'YoungJun',
+            'colours' => ['red', 'green', 'blue']
+        ]);
     }
 
 

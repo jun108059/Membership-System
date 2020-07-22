@@ -10,6 +10,9 @@ require_once '../App/Controllers/Posts.php';
 require_once '../Core/Router.php';
 */
 
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+
 spl_autoload_register(function ($class){
     $root = dirname(__DIR__); // 부모 directory 저장
     $file = $root . '/' . str_replace('\\', '/', $class) . '.php';

@@ -9,7 +9,7 @@
 <p>안녕 나는 View 야! <?php echo htmlspecialchars($name); ?>!</p>
 <ul>
     <?php foreach ($colours as $colour) : ?>
-    <li><?php echo htmlspecialchars($colour); ?></li>
+        <li><?php echo htmlspecialchars($colour); ?></li>
     <?php endforeach; ?>
 </ul>
 </body>
