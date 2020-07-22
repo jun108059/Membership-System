@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Exception;
+
 class Router
 {
 
@@ -84,10 +86,11 @@ class Router
     /** dispatch 함수
      * controller object 생성 -> action method 실행
      * @param $url
+     * @throws Exception
      */
     public function dispatch($url)
     {
-        $url = $this->removeQueryStringVariables($url);
+        $url = $this->removeQueryStringVariables($url); // query 제거
 
         if ($this->match($url)) { // 라우팅 table 과 일치 하는 경우
             $controller = $this->params['controller'];
@@ -103,12 +106,12 @@ class Router
                 $action = $this->convertToCamelCase($action);
                 // action 값을 받아서 Camel Case 로 변환
 
-                // Error 핸들링
-                if (is_callable([$controller_object, $action])) {
-                    // 생성된 객체와 함수가 호출 가능 하다면
+                // Error & 잠재적 보안 핸들링 - action 필터 패턴 매칭
+                if (preg_match('/action$/i', $action) == 0) {
+                    // 메소드 직접 접근 제어
                     $controller_object->$action();
                 } else {
-                    echo "Method $action (in controller $controller) not found";
+                    throw new Exception("Method $action in controller $controller cannot be called directly - remove the Action suffix to call this method");
                 }
             } else { // class 가 존재 하지 않는 경우 not found 출력
                 echo "Controller class $controller not found";
