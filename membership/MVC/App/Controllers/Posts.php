@@ -3,7 +3,13 @@
 namespace App\Controllers;
 
 use \Core\View;
+use App\Models\Post; 
 
+/**
+ * Posts controller
+ *
+ * PHP version 7.4
+ */
 class Posts extends \Core\Controller
 {
 
@@ -14,7 +20,12 @@ class Posts extends \Core\Controller
      */
     public function indexAction()
     {
-        View::renderTemplate('Posts/index.html');
+        // 모델에서 data 꺼내오기
+        $posts = Post::getAll();
+        View::renderTemplate('Posts/index.html', [
+            // renderTemplate에서 변수 추출해 줌
+            'posts' => $posts
+        ]);
     }
 
     /**
