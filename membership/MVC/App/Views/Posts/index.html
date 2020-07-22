@@ -4,7 +4,13 @@
 
 {% block body %}
 
-<h1>게시글 올리기!</h1>
-<p>안녕</p>
+<h1>게시글 확인하기</h1>
+
+    <ul>
+        {% for post in posts %}
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+        {% endfor %}
+    </ul>
 
 {% endblock %}
