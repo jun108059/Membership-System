@@ -96,8 +96,9 @@ class Router
             $controller = $this->params['controller'];
             // class naming 컨벤션 - Studly Caps
             $controller = $this->convertToStudlyCaps($controller);
-            // namespace 추가
-            $controller = "App\Controllers\\$controller";
+            // namespace 추가 -> 하드 코딩 대신 메소드 호출 -> namespace 추가 옵션
+            // $controller = "App\Controllers\\$controller";
+            $controller = $this->getNamespace() . $controller;
 
             if (class_exists($controller)) { // class 가 존재 하는 경우
                 $controller_object = new $controller($this->params); // Core\Controller 에서 선언한 생성자
@@ -183,6 +184,23 @@ class Router
         }
 
         return $url;
+    }
+
+    /**
+     * Get the namespace for the controller class. The namespace defined in the
+     * route parameters is added if present.
+     *
+     * @return string The request URL
+     */
+    protected function getNamespace()
+    {
+        $namespace = 'App\Controllers\\';
+
+        if (array_key_exists('namespace', $this->params)) {
+            $namespace .= $this->params['namespace'] . '\\';
+        }
+
+        return $namespace;
     }
 }
 

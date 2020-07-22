@@ -3,8 +3,6 @@
  * Front Controller
  */
 
-// echo 'Hello from the public folder!"'.$_SERVER['QUERY_STRING'].'"';
-
 /* namespace + autoload 활용 -> 코드 삭제
 // Controller class
 require_once '../App/Controllers/Posts.php';
@@ -27,7 +25,7 @@ $router->add('', ['controller' => 'Home', 'action' => 'index']);
 $router->add('posts', ['controller' => 'Posts', 'action' => 'index']);
 $router->add('{controller}/{action}');
 $router->add('{controller}/{id:\d+}/{action}');
-$router->add('admin/{action}/{controller}');
+$router->add('admin/{controller}/{action}', ['namespace' => 'Admin']);
 
 /* dispatch 함수를 통해 일치 여부 검사 (삭제)
 // Display the routing table
