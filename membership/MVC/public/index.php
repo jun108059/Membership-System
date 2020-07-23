@@ -1,11 +1,9 @@
 <?php
-/**
- * Front Controller
- */
+/** Front Controller */
 
 /* namespace + autoload 활용 -> 코드 삭제
 // Controller class
-require_once '../App/Controllers/Posts.php';
+require_once '../App/Controllers/PostsController.php';
 // Routing
 require_once '../Core/Router.php';
 */
@@ -24,11 +22,14 @@ spl_autoload_register(function ($class){
 $router = new Core\Router(); // namespace 적용
 
 // Add the routes
-$router->add('', ['controller' => 'Home', 'action' => 'index']);
+$router->add('', ['controller' => 'Login', 'action' => 'index']);
+$router->add('home', ['controller' => 'Home', 'action' => 'index']);
 $router->add('posts', ['controller' => 'Posts', 'action' => 'index']);
 $router->add('{controller}/{action}');
 $router->add('{controller}/{id:\d+}/{action}');
 $router->add('admin/{controller}/{action}', ['namespace' => 'Admin']);
+
+//$router->add('login', ['controller' => 'Login', 'action' => 'index']);
 
 /* dispatch 함수를 통해 일치 여부 검사 (삭제)
 // Display the routing table
@@ -49,7 +50,10 @@ if ($router->match($url)) {
 }
 */
 
-$router->dispatch($_SERVER['QUERY_STRING']);
+try {
+    $router->dispatch($_SERVER['QUERY_STRING']);
+} catch (Exception $e) {
+}
 
 /*************라우팅 vs dispatch************/
 // 1. routing : asking for directions
