@@ -51,11 +51,11 @@ class Router
     {
 
         // Match to the fixed URL format /controller/action
-        //$reg_exp = "/^(?P<controller>[a-z-]+)\/(?P<action>[a-z-]+)$/";
+        // $reg_exp = "/^(?P<controller>[a-z-]+)\/(?P<action>[a-z-]+)$/";
 
         foreach ($this->routes as $route => $params) {
             if (preg_match($route, $url, $matches)) {
-                //Get named capture group values
+                // Get named capture group values
                 // $params = [];
 
                 foreach ($matches as $key => $match) {
@@ -71,18 +71,6 @@ class Router
         return false;
     }
 
-    // Get Routes
-    public function getRoutes()
-    {
-        return $this->routes;
-    }
-
-    // Get Parameters
-    public function getParams()
-    {
-        return $this->params;
-    }
-
     /** dispatch 함수
      * controller object 생성 -> action method 실행
      * @param $url
@@ -93,7 +81,7 @@ class Router
         $url = $this->removeQueryStringVariables($url); // query 제거
 
         if ($this->match($url)) { // 라우팅 table 과 일치 하는 경우
-            $controller = $this->params['controller'];
+            $controller = $this->params['controller'] . 'Controller';
             // class naming 컨벤션 - Studly Caps
             $controller = $this->convertToStudlyCaps($controller);
             // namespace 추가 -> 하드 코딩 대신 메소드 호출 -> namespace 추가 옵션
@@ -118,7 +106,7 @@ class Router
                 echo "Controller class $controller not found";
             }
         } else {
-            echo 'No route matched.';
+            echo '라우팅 디스패치 안 됨!';
         }
     }
 

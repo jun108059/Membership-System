@@ -40,14 +40,13 @@ abstract class Controller
     public function __call($name, $args)
     {
         $method = $name . 'Action'; // 메소드 이름 + Action (Suffix)
-
         if (method_exists($this, $method)) { // 메소드 존재 하면
             if ($this->before() !== false) { // before 메소드 호출
                 call_user_func_array([$this, $method], $args); // 해당 메소드 실행
                 $this->after(); // after 메소드 호출
             }
         } else {
-            echo "Method $method not found in controller " . get_class($this);
+            echo "컨트롤러에 Method [ $method ]가 없음" . get_class($this);
         }
     }
 

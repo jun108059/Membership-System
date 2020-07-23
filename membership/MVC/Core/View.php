@@ -2,6 +2,10 @@
 
 namespace Core;
 
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+
 /**
  * View
  */
@@ -11,8 +15,9 @@ class View
     /**
      * Render a view file
      *
-     * @param string $view  The view file
+     * @param string $view The view file
      *
+     * @param array $args
      * @return void
      */
     public static function render($view, $args = [])
@@ -24,10 +29,17 @@ class View
         if (is_readable($file)) {
             require $file;
         } else {
-            echo "$file not found";
+            echo "View 파일 중 [ $file ] 파일을 찾을 수 없음";
         }
     }
 
+    /**
+     * @param string $template
+     * @param array $args
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public static function renderTemplate(string $template, array $args = [])
     {
         static $twig = null;
