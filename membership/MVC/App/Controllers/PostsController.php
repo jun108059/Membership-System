@@ -3,14 +3,14 @@
 namespace App\Controllers;
 
 use \Core\View;
-use App\Models\Post; 
+use App\Models\Post;
 
 /**
- * Posts controller
+ * PostsController
  *
  * PHP version 7.4
  */
-class Posts extends \Core\Controller
+class PostsController extends \Core\Controller
 {
 
     /**
@@ -20,10 +20,10 @@ class Posts extends \Core\Controller
      */
     public function indexAction()
     {
-        // 모델에서 data 꺼내오기
+        // 모델 에서 data 꺼내 오기
         $posts = Post::getAll();
         View::renderTemplate('Posts/index.html', [
-            // renderTemplate에서 변수 추출해 줌
+            // renderTemplate 에서 변수 추출해 줌
             'posts' => $posts
         ]);
     }
@@ -35,7 +35,7 @@ class Posts extends \Core\Controller
      */
     public function addNewAction()
     {
-        echo 'Hello from the addNew action in the Posts controller!';
+        echo 'Hello from the addNew action in the PostsController';
     }
 
     /**
@@ -45,7 +45,7 @@ class Posts extends \Core\Controller
      */
     public function editAction()
     {
-        echo 'Hello from the edit action in the Posts controller!';
+        echo 'Hello from the edit action in the PostsController';
         echo '<p>Route parameters: <pre>' .
             htmlspecialchars(print_r($this->route_params, true)) . '</pre></p>';
     }

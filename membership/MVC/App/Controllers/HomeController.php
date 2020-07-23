@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 
-class Home extends \Core\Controller
+class HomeController extends \Core\Controller
 {
     // 메인 코어 Controller 를 상속 받음
 
@@ -41,7 +41,7 @@ class Home extends \Core\Controller
      */
     public function indexAction()
     {
-        // index action in the Home controller
+        // index action in the HomeController
         // View 렌더링 추가!
         /*
         View::render('Home/index.php', [
@@ -49,7 +49,7 @@ class Home extends \Core\Controller
             'colours' => ['red', 'green', 'blue']
         ]);
         */
-        View::renderTemplate('Home/index.html', [
+        View::renderTemplate('Home/index.php', [
             'name'    => 'YoungJun',
             'colours' => ['red', 'green', 'blue']
         ]);
