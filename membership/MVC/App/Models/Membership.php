@@ -64,25 +64,66 @@ class Membership extends \Core\Model
             return false;
         }
     }
+
+    public static function isUserExisted($userID) {
+        try {
+            // 추상화 Core Model 클래스 - getDB() 호출
+            // DB 연결
+            $db = static::getDB();
+
+            $stmt = $db->prepare("SELECT mem_user_id from user WHERE mem_user_id=:userID");
+            $stmt->bindValue(':userID',$userID,PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
             echo $e->getMessage();
+            return false;
         }
     }
 
-    public static function getId()
+    public static function isEmailExisted($email) {
+        try {
+            // 추상화 Core Model 클래스 - getDB() 호출
+            // DB 연결
+            $db = static::getDB();
+
+            $stmt = $db->prepare("SELECT mem_email from user WHERE mem_email=:email");
+            $stmt->bindValue(':email',$email,PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function isPhoneExisted($phone)
     {
         try {
             // 추상화 Core Model 클래스 - getDB() 호출
             // DB 연결
             $db = static::getDB();
 
-            $stmt = $db->query('SELECT mem_user_id FROM user');
-            return $stmt->fetchAll(PDO::FETCH_ASSOC); // fetch One 으로 변경
-            // 배열 형태가 아니고 하나의 값으로 가져오기
-            // Where 절 추가
-
+            $stmt = $db->prepare("SELECT mem_phone from user WHERE mem_phone=:phone");
+            $stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (PDOException $e) {
             echo $e->getMessage();
+            return false;
         }
-        return $stmt;
     }
+
 }
