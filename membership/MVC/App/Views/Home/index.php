@@ -6,11 +6,6 @@
 </head>
 <body>
 <h1>Welcome</h1>
-<p>안녕 나는 View 야! <?php echo htmlspecialchars($name); ?>!</p>
-<ul>
-    <?php foreach ($colours as $colour) : ?>
-        <li><?php echo htmlspecialchars($colour); ?></li>
-    <?php endforeach; ?>
-</ul>
+<p>안녕하세요! 멤버쉽 서비스입니다.</p>
 </body>
 </html>
