@@ -8,12 +8,6 @@
 <form method="post" action="/Membership/signUpDB">
     <h1>회원가입</h1>
 
-    <?php
-    if(isset($msg)){  // Check if $msg is not empty
-        echo '<div class="statusmsg">'.$msg.'</div>'; // Display our message and wrap it with a div with the class "statusmsg".
-    }
-    ?>
-
     <fieldset>
         <legend>입력하세요</legend>
         <table>
@@ -29,7 +23,7 @@
             </tr>
             <tr>
                 <td>이메일<br><br></td>
-                <td><input type="text" name="email" maxlength="30" placeholder="email로 인증번호가 전송됩니다.">
+                <td><input type="text" name="email" maxlength="30" placeholder="인증 받을 email">
                     @<select name="emadress">
                         <option value="naver.com">naver.com</option>
                         <option value="google.com">google.com</option>
@@ -43,9 +37,9 @@
             <tr>
                 <td>전화번호<br><br></td>
                 <td><input type="text" size="35" name="phone" placeholder="010-1234-1234"
-                    pattern = "\d{3}\-\d{4}\-\d{4}"
-                    title="010-1234-1234 형식으로 입력해주세요"
-                    maxlength="13"><br><br></td>
+                           pattern = "\d{3}\-\d{4}\-\d{4}"
+                           title="010-1234-1234 형식으로 입력해주세요"
+                           maxlength="13"><br><br></td>
             </tr>
             <tr>
                 <td>성별<br><br></td>
