@@ -39,6 +39,31 @@ class Membership extends \Core\Model
             $stmt = $db->exec($sql);
             echo $stmt;
         } catch (PDOException $e) {
+            echo $e->getMessage(); // error 로그를 파일로 관리하면 좋음
+            return false;
+        }
+    }
+
+    public static function checkEmail($userEmail)
+    {
+        try {
+            // 추상화 Core Model 클래스 - getDB() 호출
+            // DB 연결
+            $db = static::getDB();
+
+            $stmt = $db->prepare("SELECT email_hash from user WHERE mem_email=:userEmail");
+            $stmt->bindValue(':userEmail', $userEmail, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
             echo $e->getMessage();
         }
     }
