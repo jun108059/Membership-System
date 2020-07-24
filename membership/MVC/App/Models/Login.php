@@ -49,4 +49,23 @@ class Login extends \Core\Model
             echo $e->getMessage();
         }
     }
+
+    public static function LoginCheck()
+    {
+        // 세션이 유지 되고 있는지 확인 하기!
+        try {
+
+            // 추상화 Core Model 클래스 - getDB() 호출
+            // DB 연결
+            $db = static::getDB();
+
+            $stmt = $db->query('SELECT mem_user_id, mem_password FROM user');
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
 }
