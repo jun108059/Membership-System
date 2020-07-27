@@ -9,28 +9,30 @@ use DateTime;
 
 class MembershipController extends \Core\Controller
 {
-    public function signUpAction()
+    public function signUpEmailAction()
     {
         // View 페이지 렌더링 해주기
-        View::render('Membership/signUp.php',);
-
+        View::render('Membership/signUpEmail.php',);
     }
 
+    public function sendMailAction(){
+        // 입력된 email 값 POST로 받기
+        $userMail = $_POST['email'] . '@' . $_POST['emadress'];
+
+        $certify = random_int(100000, 999999);
+
+        MailerController::mail($userMail, $certify);
+
+        View::render('Membership/email.php',[
+            'mail' => $userMail,
+            'certify' => $certify
+        ]);
+    }
     /** 가입 완료 버튼 -> DB data 넣기 */
     public function signUpDBAction()
     {
-        // 필수 값 비어 있는지 확인
-        if(empty( $_POST['id']) ||
-            empty( $_POST['password']) ||
-            empty( $_POST['email']) ||
-            empty( $_POST['emadress']) ||
-            empty( $_POST['name']) ||
-            empty( $_POST['phone']) ||
-            empty( $_POST['gender'] ))
-        {
-            echo '<script> alert("❌ 정보를 모두 입력해주세요 ❌"); history.back(); </script>';
-            exit();
-        }
+        // 비밀 번호 유효성 검사
+        MembershipController::passwordCheck($_POST['password']);
 
         /************************************************************/
         /** ♻ 중복체크 부분 모두 ajax 비동기 처리로
@@ -84,20 +86,8 @@ class MembershipController extends \Core\Controller
 
         /**세션 정보 넣는 시점!*/
 
-
-        /************ 이메일 함수로 분리하고 삭제할 코드 ************/
-        $hash = password_hash($userMail, PASSWORD_DEFAULT);
-
-        $subjcet = "[멤버쉽 시스템] 인증 요청 메일입니다.";
-        $content = "인증번호는 [ {$hash} ] 입니다.";
-        $headers = "From: jun108059@naver.com\r\n";
-        // 인증 이메일 전송
-        mail($userMail,$subjcet, $content, $headers);
-        /*********************************************************/
-
         // SignUp 완료 -> rendering
-        View::render('Membership/signUpOK.php', [
-        ]);
+        View::render('Membership/signUpOK.php', []);
 
     }
 
@@ -107,50 +97,35 @@ class MembershipController extends \Core\Controller
         View::render('Membership/certificate.php', []);
     }
 
-    public function sendMail($userMail)
+
+
+    /**
+     * 비밀 번호 유효성 검사 함수
+     * @param $_password
+     */
+    protected function passwordCheck($_password)
     {
-        $mail = new PHPMailer(true);
+        $pw = $_password;
+        $num = preg_match('/[0-9]/u', $pw);
+        $eng = preg_match('/[a-z]/u', $pw);
+        $spe = preg_match("/[\!\@\#\$\%\^\&\*]/u",$pw);
 
-        try {
+        if(strlen($pw) < 8 || strlen($pw) > 21)
+        {
+            echo '<script> alert("🔴 비밀번호는 8자리 ~ 20자리 이내로 입력해주세요. 🔴"); history.back(); </script>';
+            exit();
+        }
 
-            // 서버 세팅
-            $mail -> SMTPDebug = 3;    // 디버깅 설정
-            $mail -> isSMTP();               // SMTP 사용 설정
+        if(preg_match("/\s/u", $pw) == true)
+        {
+            echo '<script> alert("🟡 비밀번호는 공백없이 입력해주세요. 🟡"); history.back(); </script>';
+            exit();
+        }
 
-            $mail -> Host = "smtp.naver.com";                      // email 보낼때 사용할 서버를 지정
-            $mail -> SMTPAuth = true;                                // SMTP 인증을 사용함
-            $mail -> Username = "jun108059@naver.com";  // 메일 계정
-            $mail -> Password = "password";                   // 메일 비밀번호
-            $mail -> SMTPSecure = "ssl";                             // SSL을 사용함
-            $mail -> Port = 465;                                        // email 보낼때 사용할 포트를 지정
-            $mail -> CharSet = "utf-8";                                // 문자셋 인코딩
-
-            // 보내는 메일
-            $mail -> setFrom("jun108059@naver.com", "transmit");
-
-            // 받는 메일
-            $mail -> addAddress("youngjun108059@gmail.com", "receive01");
-            $mail -> addAddress($userMail, "receive02");
-
-            $hash = password_hash($userMail, PASSWORD_DEFAULT);
-
-            // 메일 내용
-            $mail -> isHTML(true); // HTML 태그 사용 여부
-            $mail -> Subject = "[멤버쉽 시스템] 인증 요청 메일입니다."; // 메일 제목
-            $mail -> Body = "인증번호는 {$hash} 입니다.";    // 메일 내용
-            $mail -> AltBody = "This is the plain text version of the email content";
-//            /** 첨부 파일 */
-//            $mail -> addAttachment("./test.zip");
-//            $mail -> addAttachment("./image.jpg");
-
-            // 메일 전송
-            $mail -> send();
-
-            echo "인증번호 전송 완료";
-
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error : ", $mail -> ErrorInfo;
+        if( $num == 0 || $eng == 0 || $spe == 0)
+        {
+            echo '<script> alert("🟠 비밀번호는 영문, 숫자, 특수문자를 혼합하여 입력해주세요. 🟠"); history.back(); </script>';
+            exit();
         }
     }
-
 }
