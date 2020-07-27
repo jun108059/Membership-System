@@ -44,7 +44,7 @@ class LoginController extends \Core\Controller
     protected function before()
     {
         if (isset($_SESSION['mem_user_id'])) {
-            View::render('Home/index.php', []);
+            View::render('Home/index.html', []);
         }
     }
 
