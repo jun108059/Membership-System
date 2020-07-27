@@ -30,8 +30,7 @@ class Membership extends \Core\Model
                      mem_level = '" . $user['mem_level'] . "',
                      mem_reg_dt = '" . $user['mem_reg_dt'] . "',
                      mem_log_dt = '" . $user['mem_log_dt'] . "',
-                     mem_pw_dt = '" . $user['mem_pw_dt'] . "',
-                     email_hash = '" . $user['certify'] . "'
+                     mem_pw_dt = '" . $user['mem_pw_dt'] . "'
                    ";
 
             echo $sql;
@@ -42,27 +41,7 @@ class Membership extends \Core\Model
             echo $e->getMessage(); // error 로그를 파일로 관리하면 좋음
             return false;
         }
-    }
-
-    public static function checkEmail($userEmail)
-    {
-        try {
-            // 추상화 Core Model 클래스 - getDB() 호출
-            // DB 연결
-            $db = static::getDB();
-
-            $stmt = $db->prepare("SELECT email_hash from user WHERE mem_email=:userEmail");
-            $stmt->bindValue(':userEmail', $userEmail, PDO::PARAM_STR);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
+        return true;
     }
 
     public static function isUserExisted($userID) {
@@ -75,8 +54,10 @@ class Membership extends \Core\Model
             $stmt->bindValue(':userID',$userID,PDO::PARAM_STR);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
+                echo json_encode(array('res'=>'bad'));
                 return true;
             } else {
+                echo json_encode(array('res'=>'good'));
                 return false;
             }
         } catch (PDOException $e) {
