@@ -17,15 +17,17 @@ class HomeController extends \Core\Controller
         // index action in the HomeController
         // View 렌더링 추가!
 
-        View::render('Home/index.php', [
-            'name'    => 'Dave',
-            'colours' => ['red', 'green', 'blue']
-        ]);
+        View::render('Home/index.html', []);
 
-        View::renderTemplate('Home/index.php', [
-            'name'    => 'YoungJun',
-            'colours' => ['red', 'green', 'blue']
-        ]);
+//        View::renderTemplate('Home/index.html', [
+//            'name'    => 'YoungJun',
+//            'colours' => ['red', 'green', 'blue']
+//        ]);
+    }
+
+    public function myNameAction()
+    {
+        View::render('Home/myname.php', []);
     }
 
 
