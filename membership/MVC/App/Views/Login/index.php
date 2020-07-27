@@ -15,7 +15,7 @@
         <table align="center" border="0" cellspacing="0" width="300">
             <tr>
                 <td width="130" colspan="1">
-                    <input type="text" name="mem_user_id" class="inph">
+                    <input type="text" name="user_id" class="inph" placeholder="아이디를 입력하세요">
                 </td>
                 <td rowspan="2" align="center" width="100">
                     <button type="submit" id="btn">로그인</button>
@@ -23,13 +23,13 @@
             </tr>
             <tr>
                 <td width="130" colspan="1">
-                    <input type="password" name="mem_password" class="inph">
+                    <input type="password" name="user_password" class="inph"  placeholder="비밀번호를 입력하세요">
                 </td>
             </tr>
             <tr>
                 <td colspan="3" align="center" class="mem">
                     <br>
-                    <a href="Membership/signUp">회원가입</a>
+                    <a href="Membership/signUpEmail">회원가입</a>
                 </td>
             </tr>
         </table>
