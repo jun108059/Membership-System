@@ -21,11 +21,21 @@ class MembershipController extends \Core\Controller
 
         $certify = random_int(100000, 999999);
 
-        MailerController::mail($userMail, $certify);
+//        MailerController::mail($userMail, $certify);
+        echo "메일 보내는 함수 주석처리";
 
         View::render('Membership/email.php',[
             'mail' => $userMail,
             'certify' => $certify
+        ]);
+    }
+
+    public function signUpAction()
+    {
+        $userMail = $_POST['email'];
+        // View 페이지 렌더링 해주기
+        View::render('Membership/signUp.php',[
+            'mail' => $userMail
         ]);
     }
     /** 가입 완료 버튼 -> DB data 넣기 */
@@ -40,12 +50,9 @@ class MembershipController extends \Core\Controller
          */
 
         // User ID 중복 체크
-        if (Membership::isUserExisted($_POST['id'])) {
-            echo '<script> alert("🔴 이미 사용 중인 ID입니다. 🔴"); history.back(); </script>';
-            exit();
-        }
 
-        $userMail = $_POST['email'] . '@' . $_POST['emadress'];
+
+        $userMail = $_POST['email'];
         // User E-mail 중복 체크
         if (Membership::isEmailExisted($userMail)) {
             echo '<script> alert("🟡 이미 사용 중인 Email입니다. 🟡"); history.back(); </script>';
@@ -63,10 +70,10 @@ class MembershipController extends \Core\Controller
         $now = (new DateTime())->format('Y-m-d H:i:s');
         $userData = [
             'mem_user_id' => $_POST['id'],
-            'mem_email' => $_POST['email'] . '@' . $_POST['emadress'],
+            'mem_email' => $_POST['email'],
             'mem_password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
             'mem_status' => 'Y', // enum 타입 - 정상 가입
-            'mem_cert' => 'N', // enum 타입 - 본인 인증 여부 디폴트 = N
+            'mem_cert' => 'Y', // enum 타입 - 본인 인증 여부 디폴트 = N
             'mem_name' => $_POST['name'],
             'mem_phone' => $_POST['phone'],
             'mem_gender' => $_POST['gender'], // enum 타입
@@ -74,8 +81,7 @@ class MembershipController extends \Core\Controller
             'mem_reg_dt' => $now, // 회원 가입 일시
             'mem_log_dt' => $now, // 마지막 로그인 일시
             'mem_pw_dt' => $now, // 마지막 비밀 번호 변경 일시
-            // 이메일 인증 위한 hash
-            'certify' => password_hash($_POST['email'] . '@' . $_POST['emadress'], PASSWORD_DEFAULT)
+
         ];
 
         /** 데이터 Insert
@@ -91,6 +97,12 @@ class MembershipController extends \Core\Controller
 
     }
 
+    public function checkIdAction() {
+        if (Membership::isUserExisted($_POST['id'])) {
+            echo '<script> alert("🔴 이미 사용 중인 ID입니다. 🔴"); history.back(); </script>';
+            exit();
+        }
+    }
     public function certificationAction()
     {
         /** 세션 정보를 유지 -> 바로 사용자 정보 뜨게 수정 */
