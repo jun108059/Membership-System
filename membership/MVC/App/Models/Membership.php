@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use DateTime;
@@ -10,101 +11,115 @@ use PDOException;
  */
 class Membership extends \Core\Model
 {
-
+    /**
+     * 회원 가입을 통해 받은 유저 정보 저장
+     * @param $user // 가입 유저 정보
+     * @return bool $user != 배열 || Null = False
+     */
     public static function insertInfo($user)
     {
-        try {
-            // 추상화 Core Model 클래스 - getDB() 호출
-            // DB 연결
-            $db = static::getDB();
-
-            $sql = "INSERT INTO user SET
-                     mem_user_id = '" . $user['mem_user_id'] . "',
-                     mem_email = '" . $user['mem_email'] . "',
-                     mem_password = '" . $user['mem_password'] . "',
-                     mem_status = '" . $user['mem_status'] . "',
-                     mem_cert = '" . $user['mem_cert'] . "',
-                     mem_name = '" . $user['mem_name'] . "',
-                     mem_phone = '" . $user['mem_phone'] . "',
-                     mem_gender = '" . $user['mem_gender'] . "',
-                     mem_level = '" . $user['mem_level'] . "',
-                     mem_reg_dt = '" . $user['mem_reg_dt'] . "',
-                     mem_log_dt = '" . $user['mem_log_dt'] . "',
-                     mem_pw_dt = '" . $user['mem_pw_dt'] . "'
-                   ";
-
-            echo $sql;
-
-            $stmt = $db->exec($sql);
-            echo $stmt;
-        } catch (PDOException $e) {
-            echo $e->getMessage(); // error 로그를 파일로 관리하면 좋음
+        // $user = 배열 && !Null 검사
+        if (empty($user) || !is_array($user)) {
             return false;
         }
+        // DB 연결 > 추상화 Core Model 클래스 - getDB() 호출
+        $db = static::getDB();
+
+        $bindArray = [
+            'mem_user_id'   => $user['mem_user_id'],
+            'mem_email'     => $user['mem_email'],
+            'mem_password'  => $user['mem_password'],
+            'mem_status'    => $user['mem_status'],
+            'mem_cert'      => $user['mem_cert'],
+            'mem_name'      => $user['mem_name'],
+            'mem_phone'     => $user['mem_phone'],
+            'mem_gender'    => $user['mem_gender'],
+            'mem_level'     => $user['mem_level'],
+            'mem_reg_dt'    => $user['mem_reg_dt'],
+            'mem_log_dt'    => $user['mem_log_dt'],
+            'mem_pw_dt'     => $user['mem_pw_dt']
+        ];
+        // SQL Injection 방지 (placeHolder)
+        $stmt = $db->prepare("INSERT INTO user SET
+                     mem_user_id    = :mem_user_id,
+                     mem_email      = :mem_email,
+                     mem_password   = :mem_password,
+                     mem_status     = :mem_status,
+                     mem_cert       = :mem_cert,
+                     mem_name       = :mem_name,
+                     mem_phone      = :mem_phone,
+                     mem_gender     = :mem_gender,
+                     mem_level      = :mem_level,
+                     mem_reg_dt     = :mem_reg_dt,
+                     mem_log_dt     = :mem_log_dt,
+                     mem_pw_dt      = :mem_pw_dt
+        ");
+        // binding 값 넘겨서 실행
+        $stmt->execute($bindArray);
         return true;
     }
 
-    public static function isUserExisted($userID) {
-        try {
-            // 추상화 Core Model 클래스 - getDB() 호출
-            // DB 연결
-            $db = static::getDB();
+    /**
+     * 중복 Id 있는지 검사
+     * @param $userID
+     * @return bool
+     */
+    public static function isUserExisted($userID)
+    {
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
 
-            $stmt = $db->prepare("SELECT mem_user_id from user WHERE mem_user_id=:userID");
-            $stmt->bindValue(':userID',$userID,PDO::PARAM_STR);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                echo json_encode(array('res'=>'bad'));
-                return true;
-            } else {
-                echo json_encode(array('res'=>'good'));
-                return false;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
+        $stmt = $db->prepare("SELECT mem_user_id from user WHERE mem_user_id=:userID");
+        $stmt->bindValue(':userID', $userID, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // true or false 만 반환
+        return $stmt->rowCount() > 0;
+        // 경우의 수가 두가지 뿐일때 왼쪽과 같이 간단하게 작성
+        // return ($stmt->rowCount() > 0)? true : false;
+        /*
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
             return false;
         }
+        */
     }
 
-    public static function isEmailExisted($email) {
-        try {
-            // 추상화 Core Model 클래스 - getDB() 호출
-            // DB 연결
-            $db = static::getDB();
+    /**
+     * 중복 Email 있는지 검사
+     * @param $email
+     * @return bool
+     */
+    public static function isEmailExisted($email)
+    {
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
 
-            $stmt = $db->prepare("SELECT mem_email from user WHERE mem_email=:email");
-            $stmt->bindValue(':email',$email,PDO::PARAM_STR);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
+        $stmt = $db->prepare("SELECT mem_email from user WHERE mem_email=:email");
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
     }
 
+    /**
+     * 중복 Phone 있는지 검사
+     * @param $phone
+     * @return bool
+     */
     public static function isPhoneExisted($phone)
     {
-        try {
-            // 추상화 Core Model 클래스 - getDB() 호출
-            // DB 연결
-            $db = static::getDB();
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
 
-            $stmt = $db->prepare("SELECT mem_phone from user WHERE mem_phone=:phone");
-            $stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
+        $stmt = $db->prepare("SELECT mem_phone from user WHERE mem_phone=:phone");
+        $stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
     }
 
 }
