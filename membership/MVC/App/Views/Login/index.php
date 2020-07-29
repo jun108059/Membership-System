@@ -12,7 +12,7 @@
 <div id="login_box">
     <br>
     <h1><div style="text-align: center;">로그인</div></h1>
-    <form method="post" action="Login/loginCheck">
+    <form action="Login/loginCheck" name="loginForm" method="post" onSubmit="formCheck(); return false;" >
         <table align="center" border="0" cellspacing="0" width="300">
             <tr>
                 <td width="130" colspan="1">
@@ -36,5 +36,22 @@
         </table>
     </form>
 </div>
+<script type="text/javascript">
+    function formCheck(){
+        if(!document.loginForm.user_id.value){ // ID 없음
+            alert("아이디를 입력하세요!");
+            document.loginForm.user_id.focus();
+            return false;
+        }else if(!document.loginForm.user_password.value){ // PW 없음
+            alert("비밀번호를 입력하세요!");
+            document.loginForm.user_password.focus();
+            return false;
+        }else{
+            document.loginForm.submit();
+            return true;
+        }
+    }
+</script>
 </body>
 </html>
+
