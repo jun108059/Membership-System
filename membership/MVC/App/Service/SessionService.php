@@ -1,16 +1,27 @@
 <?php
 
-class SessionService
-{
-    var $last_active_time; //마지막 활동 시간
-    var $mem_user_id; //사용자 ID
+namespace App\Service;
 
+use DateTime;
+
+class SessionManager
+{
     function __construct() //생성자
     {
         session_start(); //세션을 시작
-        $this->mem_user_id = $_SESSION["mem_user_id"]; //멤버 변수 접근은 this 사용
-        $this->last_active_time = $_SESSION["sign_in_timestamp"];
     }
+
+    function setSessionValue($key,$value) //생성자
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    /**
+    function getSession($key,$value)
+    {
+    return (!empty($_SESSION[$key])) ? : '';
+    }
+     */
 
     /**
      * 로그인 유효성 검사
@@ -18,7 +29,8 @@ class SessionService
     function isLoginExpired()
     {
         $result = false;
-        if ((time() - $this->last_active_time) > 1800) //30분동안 활동이 없으면 자동 로그아웃
+//        echo"<br>".(time() - strtotime($_SESSION['userLog']))." 값<br>";
+        if ((time() - strtotime($_SESSION['userLog'])) > 1800) //30분동안 활동이 없으면 자동 로그아웃
         {
             $result = true;
             session_destroy();
@@ -35,8 +47,10 @@ class SessionService
     /** 접근 유효성 검사 */
     function isValidAccess()
     {
+        $vaa = isset($_SESSION['userID']);
+        echo $vaa;
         $result = false;
-        if (isset($this->mem_user_id)) {
+        if (isset($_SESSION['userID'])) {
             $result = true;
         }
         return $result;
@@ -45,7 +59,6 @@ class SessionService
     /** 로그인 유지 시간 갱신 */
     function update_active_time()
     {
-        $_SESSION["sign_in_timestamp"] = time();
-        $this->last_active_time = $_SESSION["sign_in_timestamp"];
+        $_SESSION["userLog"] = (new DateTime())->format('Y-m-d H:i:s');
     }
 }
