@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Service;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -10,7 +10,7 @@ require "../vendor/phpmailer/phpmailer/src/SMTP.php";
 require "../vendor/phpmailer/phpmailer/src/Exception.php";
 
 
-class MailerController extends \Core\Controller
+class MailerService
 {
     public static function mail($receiver, $certify)
     {
@@ -24,7 +24,7 @@ class MailerController extends \Core\Controller
             $mail->Host = "smtp.naver.com";               // 네이버의 smtp 서버
             $mail->SMTPAuth = true;                         // SMTP 인증을 사용함
             $mail->Username = "jun108059@naver.com";    // 메일 계정 (지메일일경우 지메일 계정)
-            $mail->Password = "*******";                  // 메일 비밀번호
+            $mail->Password = "*********";                  // 메일 비밀번호
             $mail->SMTPSecure = "ssl";                       // SSL을 사용함
             $mail->Port = 465;                                  // email 보낼때 사용할 포트를 지정
             $mail->CharSet = "utf-8"; // 문자셋 인코딩
