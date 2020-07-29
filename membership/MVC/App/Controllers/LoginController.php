@@ -4,27 +4,32 @@ namespace App\Controllers;
 
 use \Core\View;
 use App\Models\Login;
+use SessionService;
 
 class LoginController extends \Core\Controller
 {
     public function loginCheckAction()
     {
         // 모델 에서 데이터 꺼내 오기
-        $login = Login::getIdPassword();
+        $user = Login::getIdPassword();
 
-        if ($_POST["user_id"] == "" || $_POST["user_password"] == "") {
+        // 각 변수에 ID, PW 저장
+        $user_id = $_POST['user_id'];
+        $user_pw = $_POST['user_password'];
+
+        if (empty($user_id) || empty($user_pw)) { // empty 로 빈값 체크
             echo '<script> alert(" ❓아이디 또는 패스워드 입력하세요❓"); history.back(); </script>';
         } else {
-            // password 변수에 POST 로 받아온 값을 저장
             // pw_check 변수에 Login Model 저장 password 받아 오기
-            $password = $_POST['user_password'];
-            $pw_check = Login::getPassword($_POST['user_id']);
+            $pw_check = Login::getPassword($user_id);
 
             //만약 password 와 hash_pw 가 같다면 세션 값을 저장
             //알림창 띄운후 Home rendering
-            if (password_verify($password, $pw_check['mem_password'])) {
-//                $_SESSION['mem_user_id'] = $user["mem_user_id"];
-//                $_SESSION['mem_password'] = $user["mem_password"];
+            if (password_verify($user_pw, $pw_check['mem_password'])) {
+                $session_manager = new SessionService();
+//                session_start();
+                $_SESSION['mem_user_id'] = $user['mem_user_id'];
+                $_SESSION['mem_password'] = $user['mem_password'];
 
                 echo "<script>alert('✔ 로그인 되었습니다 ✔'); location.href='/home/index';</script>";
             } else { // 비밀번호가 같지 않다면 알림창을 띄우고 전 페이지로 돌아갑니다
