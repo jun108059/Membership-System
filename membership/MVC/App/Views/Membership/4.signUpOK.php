@@ -1,7 +1,3 @@
-<?php
-session_start();
-?>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -14,12 +10,13 @@ session_start();
 <h1>
     <div style="text-align: center;">🎉회원가입을 축하드립니다!🎉</div>
 </h1>
-<h2 align="center"> 📢 안녕하세요 <?php echo $_SESSION['mem_user_id'] ?> 님</h2>
+<h2 align="center"> 📢 안녕하세요 <?php echo $name?> 님</h2>
+<h3 align="center"> ID = <?php echo $id?><br><br> Email = <?php echo $email?><br><br>Home 으로 이동합니다.</h3>
 <p align="center" class="countdown"></p>
 <br>
 
 <script type="text/javascript">alert('축하합니다! 회원가입이 완료되었습니다.');</script>
-<meta http-equiv="refresh" content="5 url=/Home/index">
+<!--<meta http-equiv="refresh" content="5 url=/">-->
 
 <script type="text/javascript" src="//code.jquery.com/jquery.min.js"></script>
 <script>
@@ -33,7 +30,7 @@ session_start();
         // 0초면 초기화 후 이동 되는 사이트
         if (count === 0) {
             clearInterval(countdown);
-            window.open("/Home/index", "_self");
+            window.open("/", "_self");
         }
         count--;//카운트 감소
     }, 1000);
