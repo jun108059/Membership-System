@@ -6,7 +6,6 @@ use App\Models\Membership;
 use App\Service\MailerService;
 use \Core\View;
 use DateTime;
-use Exception;
 
 
 class MembershipController extends \Core\Controller
@@ -29,6 +28,7 @@ class MembershipController extends \Core\Controller
      */
     public function sendMailAction()
     {
+//        header("Content-Type: application/json");
         // 입력된 email 값 POST로 받기
         $userMail = $_POST['email'] . '@' . $_POST['emadress'];
 
@@ -38,14 +38,20 @@ class MembershipController extends \Core\Controller
         }
 
         $certify = random_int(100000, 999999); // 인증 번호 random 생성
-
+//        $certify = $_POST['cert_num'];
 //        MailerService::mail($userMail, $certify);
         echo "메일 보내는 함수 주석 처리";
-
+        // View 페이지 렌더링 해주기
+        /*
+        View::render('Membership/3.signUp.php', [
+            'mail' => $userMail
+        ]);
+        */
         View::render('Membership/2.emailCertify.php', [
             'mail' => $userMail,
             'certify' => $certify
         ]);
+
     }
 
     /**
@@ -96,15 +102,11 @@ class MembershipController extends \Core\Controller
          */
         Membership::insertInfo($userData);
 
-        /**세션 정보 넣는 시점!*/
-        session_start();
-        $_SESSION['mem_user_id'] = $userData['mem_user_id'];
-        $_SESSION['mem_password'] = $userData['mem_password'];
-
         // SignUp 완료 -> rendering
         View::render('Membership/4.signUpOK.php', [
-            'userId' => $userData['mem_user_id'],
-            'userPw' => $userData['mem_password']
+            'id' => $userData['mem_user_id'],
+            'name' => $userData['mem_name'],
+            'email' => $userData['mem_email']
         ]);
         return true;
     }
