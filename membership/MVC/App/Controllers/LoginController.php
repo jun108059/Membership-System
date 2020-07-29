@@ -57,20 +57,18 @@ class LoginController extends \Core\Controller
 
     }
 
-    protected function before()
+    public function logoutAction()
     {
-        if (isset($_SESSION['mem_user_id'])) {
-            View::render('Home/index.html', []);
-        }
+        $session_manager = new SessionManager();
+        $session_manager->destroy_session();
+        View::render('Login/logout.html', []);
     }
 
-    /**
-     * Show the index page
-     * @return void
-     */
-    public function indexAction()
+    protected function before()
     {
-        View::render('Login/index.php', []);
+//        if (isset($_SESSION['mem_user_id'])) {
+//            View::render('Home/index.html', []);
+//        }
     }
 
 
