@@ -31,6 +31,14 @@
                 <td colspan="3" align="center" class="mem">
                     <br>
                     <a href="Membership/signUpEmail">회원가입</a>
+                    <br>
+                    <a href="Membership/findMyInfo">아이디 또는 비밀번호 찾기</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" align="center" class="mem">
+                    <br>
+
                 </td>
             </tr>
         </table>
