@@ -8,13 +8,14 @@
 <form method="post">
     <h1>회원가입</h1>
     <input type="hidden" name="email" id="email" value="<?php echo($mail)?>">
-    <h2>이메일 <?php echo htmlspecialchars($mail);?> 인증이 완료되었습니다.</h2>
+
+    <h3>이메일 [<?php echo htmlspecialchars($mail);?>] 인증이 완료되었습니다.</h3>
     <fieldset>
         <legend>입력하세요</legend>
         <table>
             <tr>
                 <td>아이디<br><br></td>
-                <td><input id="userId" type="text" size="35" name="userId" class="check" style="ime-mode:disabled"
+                <td><input type="text" id="userId" name="userId" size="35"  class="check" style="ime-mode:disabled"
                            placeholder="아이디(4 ~ 30 글자)" maxlength="30" required><br><br></td>
                 <td><div>&nbsp;실시간 ID 체크</div><br></td>
 
@@ -24,9 +25,9 @@
                 <td><input type="password" size="35" name="password" placeholder="비밀번호(8 ~ 20 글자)"
                            class="memberPw" id="pw1" maxlength="20" required><br><br></td>
                 <td><div id="check-pw-success" style="display: none; color: limegreen; font-weight: bold;">&nbsp;🟢사용가능한 비밀번호🟢<br><br></div>
-                <div id="check-pw-fail" style="display: inline; color: orange; font-weight: bold;">&nbsp;❌8~20자리로 영문, 숫자 포함❌<br><br></div></td>
+                    <div id="check-pw-fail" style="display: inline; color: orange; font-weight: bold;">&nbsp;❌8~20자리로 영문, 숫자 포함❌<br><br></div></td>
                 <td><div id="alert-success" style="display: none; color: blue; font-weight: bold;">&nbsp;<br/>✔😄비밀번호 일치😄✔</div>
-                <div id="alert-danger" style="display: inline; color: red; font-weight: bold;">&nbsp;<br/>❗비밀번호가 다름❗</div></td>
+                    <div id="alert-danger" style="display: inline; color: red; font-weight: bold;">&nbsp;<br/>❗비밀번호가 다름❗</div></td>
 
             </tr>
             <tr>
@@ -43,7 +44,7 @@
             <tr>
                 <td>전화번호<br><br></td>
                 <td><input type="text" size="35" name="phone" placeholder="010-1234-1234"
-                    id="tell" class="tellCheck" title="010-1234-1234 형식" maxlength="13" required><br><br></td>
+                           id="tell" class="tellCheck" title="010-1234-1234 형식" maxlength="13" required><br><br></td>
                 <td><div>&nbsp;</div><br></td>
             </tr>
             <tr>
@@ -87,7 +88,6 @@
             let idReg = /^[a-z]+[a-z0-9]{3,29}$/g;
             if( !idReg.test($(this).val()) ) {
                 alert("🟡아이디는 4~30자 영문자 또는 숫자이어야 합니다.🟡");
-                history.back();
             }
         });
     });
@@ -129,7 +129,6 @@
         let tellReg =  /^\d{3}-\d{3,4}-\d{4}$/;
         if( !tellReg.test($(this).val()) ) {
             alert("❌전화번호 형식으로 입력해주세요.❌");
-            // history.back();
         }
         //
         $self = $(this);
