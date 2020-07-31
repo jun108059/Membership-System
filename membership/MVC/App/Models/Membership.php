@@ -122,4 +122,60 @@ class Membership extends \Core\Model
         return $stmt->rowCount() > 0;
     }
 
+    /**
+     * ID 찾기
+     * @param $name
+     * @param $email
+     * @return
+     */
+    public static function findId($email)
+    {
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
+
+        $stmt = $db->prepare("SELECT mem_user_id from user WHERE mem_email=:email");
+        $stmt->bindValue(':email', $email,PDO::PARAM_STR);
+        // PDO Statement 객체가 가진 쿼리 실행
+        $stmt->execute();
+        // 결과 값 가져 오기
+        $row = $stmt ->fetch();
+        echo "<pre>";
+        print_r($row);
+        echo "</pre>";
+//        echo($row['mem_user_id']);
+//        exit();
+        return $row['mem_user_id'];
+    }
+
+
+    /**
+     * 개인 정보 수정 - 현재 Password 일치 여부 검사
+     * @param $userId
+     * @return bool
+     */
+    public static function checkPassword($userId, $userPw)
+    {
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
+
+        $stmt = $db->prepare("SELECT mem_password from user WHERE mem_user_id=:userID");
+        $stmt->bindValue(':userID', $userId, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // true or false 만 반환
+        return $stmt->rowCount() === 1;
+        // 경우의 수가 두가지 뿐일때 왼쪽과 같이 간단하게 작성
+        // return ($stmt->rowCount() > 0)? true : false;
+        /*
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+        */
+    }
+
+
 }
