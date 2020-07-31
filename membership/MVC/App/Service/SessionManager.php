@@ -32,6 +32,7 @@ class SessionManager
 //        echo"<br>".(time() - strtotime($_SESSION['userLog']))." 값<br>";
         if ((time() - strtotime($_SESSION['userLog'])) > 1800) //30분동안 활동이 없으면 자동 로그아웃
         {
+            echo '<script> alert("🔴시간 초과로 로그아웃 되었습니다\n로그인 후 이용해주세요!🔴"); </script>';
             $result = true;
             session_destroy();
         }
