@@ -124,9 +124,8 @@ class Membership extends \Core\Model
 
     /**
      * ID 찾기
-     * @param $name
      * @param $email
-     * @return
+     * @return string ID 반환
      */
     public static function findId($email)
     {
@@ -148,14 +147,112 @@ class Membership extends \Core\Model
         return $row['mem_user_id'];
     }
 
+    /**
+     * 이름 <-> Email 일치 확인
+     * @param $email
+     * @param $name
+     * @return bool 일치 여부 반환
+     */
+    public static function checkNameEmailRight($name, $email)
+    {
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
+
+        $stmt = $db->prepare("SELECT mem_name from user WHERE mem_email=:email");
+        $stmt->bindValue(':email', $email,PDO::PARAM_STR);
+        // PDO Statement 객체가 가진 쿼리 실행
+        $stmt->execute();
+        // 결과 값 가져 오기
+        $row = $stmt ->fetch();
+        // DB name 과 입력된 name 일치 여부 반환 (T/F)
+        return $row['mem_name']===$name;
+    }
 
     /**
-     * 개인 정보 수정 - 현재 Password 일치 여부 검사
+     * 재설정 비밀번호 DB Update
+     * @param $userData
+     * @return bool
+     */
+    public static function changePassword($userData)
+    {
+        // $user = 배열 && !Null 검사
+        if (empty($userData) || !is_array($userData)) {
+            return false;
+        }
+
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
+
+        $bindArray = [
+            'password'  => $userData['mem_password'],
+            'dateTime'  => $userData['mem_pw_dt'],
+            'id'        => $userData['mem_user_id']
+        ];
+
+        $sql = "UPDATE user SET 
+                mem_password = :password, 
+                mem_pw_dt    = :dateTime 
+                WHERE mem_user_id = :id";
+        $stmt = $db->prepare($sql);
+        // binding 값 넘겨서 실행
+        $stmt->execute($bindArray);
+        return true;
+        // 에러 처리 필요
+    }
+
+    /**
+     * 개인정보 수정 DB Update
+     * @param $userData
+     * @return bool
+     */
+    public static function changeInfo($userData)
+    {
+        // $user = 배열 && !Null 검사
+        if (empty($userData) || !is_array($userData)) {
+            return false;
+        }
+
+        // 추상화 Core Model 클래스 - getDB() 호출
+        // DB 연결
+        $db = static::getDB();
+
+        $bindArray = [
+            'password'      => $userData['mem_password'],
+            'name'          => $userData['mem_name'],
+            'phone'         => $userData['mem_phone'],
+            'gender'        => $userData['mem_gender'],
+            'pwDateTime'    => $userData['mem_pw_dt'],
+            'logDateTime'   => $userData['mem_log_dt'],
+            'id'            => $userData['mem_user_id']
+        ];
+
+        $sql = "UPDATE user SET 
+                mem_password    = :password, 
+                mem_name        = :name, 
+                mem_phone       = :phone, 
+                mem_gender      = :gender, 
+                mem_pw_dt       = :pwDateTime,
+                mem_log_dt      = :logDateTime
+                WHERE mem_user_id = :id";
+        $stmt = $db->prepare($sql);
+        // binding 값 넘겨서 실행
+        $stmt->execute($bindArray);
+        return true;
+        // 에러 처리 필요
+    }
+
+    /**
+     * (삭제예정) 개인 정보 수정 - 현재 Password 일치 여부 검사
      * @param $userId
+     * @param $userPw
      * @return bool
      */
     public static function checkPassword($userId, $userPw)
     {
+        // (수정) 검사는 컨트롤러로 넘겨! 여기서 하는거 아니야
+
         // 추상화 Core Model 클래스 - getDB() 호출
         // DB 연결
         $db = static::getDB();
@@ -163,18 +260,20 @@ class Membership extends \Core\Model
         $stmt = $db->prepare("SELECT mem_password from user WHERE mem_user_id=:userID");
         $stmt->bindValue(':userID', $userId, PDO::PARAM_STR);
         $stmt->execute();
+        $password = $stmt->fetch();
+        print($userPw);
+        print('\n');
+        print_r($password);
+        print('\n');
+        print(password_verify($password['mem_password'], $userPw));
+        exit();
+        return (password_verify($password['mem_password'], $userPw))? true : false;
 
-        // true or false 만 반환
-        return $stmt->rowCount() === 1;
-        // 경우의 수가 두가지 뿐일때 왼쪽과 같이 간단하게 작성
-        // return ($stmt->rowCount() > 0)? true : false;
-        /*
-        if ($stmt->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-        */
+//        if (password_verify($password['mem_password'], $userPw)) {
+//            return true;
+//        }else {
+//            return false;
+//        }
     }
 
 
