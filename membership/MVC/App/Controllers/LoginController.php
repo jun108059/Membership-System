@@ -10,7 +10,7 @@ class LoginController extends \Core\Controller
 {
 
     /**
-     * Show the index page
+     * 메인 페이지
      * @return void
      */
     public function indexAction()
@@ -38,7 +38,7 @@ class LoginController extends \Core\Controller
 
         //만약 password 와 hash_pw 가 같다면 세션 실행
         if (password_verify($user_pw, $pw_check)) {
-
+            // 세션 session_start로 수정하기
             $session_manager = new SessionManager();
             $session_manager->setSessionValue('userID', $user_id);
             $session_manager->setSessionValue('userLog', $user_log);
@@ -57,10 +57,13 @@ class LoginController extends \Core\Controller
 
     }
 
+    /**
+     * 로그아웃 -> session 제거 & View Render
+     */
     public function logoutAction()
     {
-        $session_manager = new SessionManager();
-        $session_manager->destroy_session();
+        session_start();
+        session_destroy();
         View::render('Login/logout.html', []);
     }
 
