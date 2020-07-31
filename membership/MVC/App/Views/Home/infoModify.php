@@ -1,3 +1,11 @@
+<?php
+if(!isset($_SESSION['userID'])) {
+    echo '<script> alert("🧨잘못된 접근입니다.(home/index.php)"); history.back(); </script>';
+//    echo "<meta http-equiv='refresh' content='0; url=/'>";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,8 +13,8 @@
     <title>개인정보수정</title>
 </head>
 <body>
-<form method="post">
-    <h1>개인정보</h1>
+<form action="/Membership/newInfoToDB" method="post">
+    <h1>🔧 개인정보수정 🔧</h1>
     <input type="hidden" name="user_id" id="user_id" value="<?php echo($user_id)?>">
     <input type="hidden" name="user_pw" id="user_pw" value="<?php echo($user_pw)?>">
     <input type="hidden" name="user_name" id="user_name" value="<?php echo($user_name)?>">
@@ -15,7 +23,7 @@
     <input type="hidden" name="register" id="register" value="<?php echo($register)?>">
     <input type="hidden" name="email" id="email" value="<?php echo($email)?>">
 
-    <h3>이메일 [<?php echo htmlspecialchars($mail);?>] 인증이 완료되었습니다.</h3>
+    <h3>[<?php echo htmlspecialchars($user_id);?>]님의 개인정보 수정 페이지입니다.</h3>
     <fieldset>
         <legend>개인정보수정</legend>
         <table>
@@ -24,9 +32,13 @@
                 <td><?php echo($user_id)?><br><br></td>
             </tr>
             <tr>
+                <td style="color: mediumblue; font-weight: bold;">이메일<br><br></td>
+                <td><?php echo($email)?><br><br></td>
+            </tr>
+            <tr>
                 <td style="color: mediumblue; font-weight: bold;">현재 비밀번호<br><br></td>
                 <td><input type="password" size="35" name="password" placeholder="사용중인 비밀번호"
-                           class="check" id="curr_pw" maxlength="20" required><br><br></td>
+                           class="checkPw" id="curr_pw" maxlength="20" required><br><br></td>
                 <td><div>&nbsp;현재 비밀번호를 입력하세요.</div><br></td>
 
             <tr>
@@ -47,12 +59,12 @@
             </tr>
             <tr>
                 <td>이름<br><br></td>
-                <td><input type="text" size="35" name="name" placeholder="이름 2 ~ 20 글자"
+                <td><input type="text" size="35" name="name" placeholder="<?php echo($user_name)?>"
                            class="memberName" maxlength="20" required><br><br></td>
             </tr>
             <tr>
                 <td>전화번호<br><br></td>
-                <td><input type="text" size="35" name="phone" placeholder="010-1234-1234"
+                <td><input type="text" size="35" name="phone" placeholder="<?php echo($phone)?>"
                            id="tell" class="tellCheck" title="010-1234-1234 형식" maxlength="13" required><br><br></td>
                 <td><div>&nbsp;</div><br></td>
             </tr>
@@ -60,13 +72,24 @@
                 <td>성별<br><br></td>
                 <td>남<input type="radio" name="gender" value="M"> 여<input type="radio" name="gender" value="F" required><br><br></td>
             </tr>
+            <tr>
+                <td style="color: mediumblue; font-weight: bold;">가입일<br><br></td>
+                <td><?php echo($register)?><br><br></td>
+            </tr>
 
         </table>
 
-        <input type="submit" value="가입하기" formaction="/Membership/signUpDB"/>&nbsp;&nbsp;<input type="reset" value="다시쓰기"/>
+        <input type="submit" value="변경하기" />&nbsp;&nbsp;<input type="reset" value="다시쓰기"/>
 
     </fieldset>
 </form>
+<div>
+    <br>
+    <input type="button" id="withdrawal" value="회원탈퇴하기"
+           style="color: #fff; background:red; border-radius:0.5em; padding:3px 10px;"
+    />
+</div>
+
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js" ></script>
 </body>
@@ -144,6 +167,8 @@
         );
 
     });
+
+
 
 </script>
 </html>
