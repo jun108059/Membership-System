@@ -1,3 +1,12 @@
+<?php
+if(!isset($_SESSION['userID'])) {
+    echo '<script> alert("🧨잘못된 접근입니다.(home/index.php)"); history.back(); </script>';
+//    echo "<meta http-equiv='refresh' content='0; url=/'>";
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
