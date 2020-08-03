@@ -244,6 +244,43 @@ class Membership extends \Core\Model
     }
 
     /**
+     * (회원탈퇴) Delete 회원 정보
+     * @param $user // 가입 유저 정보
+     * @return bool $user != 배열 || Null = False
+     */
+    public static function deleteInfo($userData)
+    {
+        // $user = 배열 && !Null 검사
+        if (empty($userData) || !is_array($userData)) {
+            return false;
+        }
+        // DB 연결 > 추상화 Core Model 클래스 - getDB() 호출
+        $db = static::getDB();
+
+        // withdraw 탈퇴한 계정 테이블 Insert 추가하기!
+
+
+        $bindArray = [
+            'password'      => $userData['mem_password'],
+            'name'          => $userData['mem_name'],
+            'phone'         => $userData['mem_phone'],
+            'gender'        => $userData['mem_gender'],
+            'pwDateTime'    => $userData['mem_pw_dt'],
+            'logDateTime'   => $userData['mem_log_dt'],
+            'id'            => $userData['mem_user_id']
+        ];
+
+        $sql = "DELETE FROM user WHERE mem_user_id = :userID";
+
+        $stmt = $db->prepare($sql);
+        // binding 값 넘겨서 실행
+        $stmt->execute($bindArray);
+        return true;
+        // 에러 처리 필요
+    }
+
+
+    /**
      * (삭제예정) 개인 정보 수정 - 현재 Password 일치 여부 검사
      * @param $userId
      * @param $userPw
