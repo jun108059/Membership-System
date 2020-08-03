@@ -313,7 +313,7 @@ class MembershipController extends \Core\Controller
 
     /**
      * 💥 비밀번호 재설정 DB 저장!
-     *
+     * @return boolean
      */
     public function newPwToDBAction()
     {
@@ -336,6 +336,8 @@ class MembershipController extends \Core\Controller
          * 데이터 Update
          */
         Membership::changePassword($userData);
+
+        View::render('Login/index.php', []);
 
         return true;
 
@@ -386,34 +388,73 @@ class MembershipController extends \Core\Controller
     /***************************** 회원 탈퇴 시작 **********************************/
 
     /**
+     * 회원 탈퇴 페이지 이동
+     *
+     */
+    public function withDrawPageAction()
+    {
+        session_start();
+        // 세션 유지 중이면 넘어갈 수 있는 코드 추가!
+
+        $user_id = $_SESSION['userID'];
+        $user = Membership::checkPassword($user_id);
+        $user_pw = $user['mem_password'];
+        $now = (new DateTime())->format('Y-m-d H:i:s');
+        $userData = [
+            'mem_user_id'   => $user_id,
+            'mem_user_pw'   => $user_pw,
+            'mem_log_dt'    => $now,
+//            'reason_detail' => $_POST['reason']
+        ];
+
+
+        View::render('Membership/withdraw.php', [
+            'user_id' => $userData['mem_user_id'],
+            'user_pw' => $userData['mem_user_pw'],
+            'log_datetime' => $userData['mem_log_dt']
+        ]);
+        return true;
+
+    }
+
+    /**
      * 회원 탈퇴 로직
      *
      */
     public function withDrawAction()
     {
-        // 비밀 번호 유효성 검사 - Script 에서 튕기는 코드 작성 후 삭제
-//        MembershipController::passwordCheck($_POST['password']);
-//
+        session_start();
+        $resultArray = ['result' => 'fail', 'alert' => '',
+            'userId' => $_SESSION['userID'],
+            'reason' => $_POST['reason']
+        ];
+
+        if (empty($_SESSION['userID']) || empty($_POST['reason'])) {
+            $resultArray['alert'] = '🧨잘못된 접근입니다.';
+            echo json_encode($resultArray);
+            exit();
+        }
+
         $now = (new DateTime())->format('Y-m-d H:i:s');
-//        $userData = [
-//            'mem_user_id'   => $_POST['user_id'],
-//            'mem_password'  => password_hash($_POST['password'], PASSWORD_DEFAULT),
-//            'mem_name'      => $_POST['name'],
-//            'mem_phone'     => $_POST['phone'],
-//            'mem_gender'    => $_POST['gender'],
-//            'mem_pw_dt'     => $now, // 마지막 비밀 번호 변경 일시
-//            'mem_log_dt'    => $now
-//        ];
-//
-//        /**
-//         * 데이터 Update
-//         */
-//        $user = Membership::changeInfo($userData);
-        View::render('Membership/withdraw.php', [
-//            'user_id' => $user['mem_user_id'],
-//            'user_pw' => $user['mem_password']
-        ]);
-        return true;
+        $userData = [
+            'mem_user_id'   => $_SESSION['userID'],
+            'mem_log_dt'    => $now,
+            'reason_detail' => $_POST['reason']
+        ];
+
+        /**
+         * 회원 정보 DELETE
+         * @return boolean
+         */
+        $deleteReturn = Membership::deleteInfo($userData);
+
+        if ($deleteReturn) {
+            $resultArray['result'] = 'success';
+        }
+
+        session_destroy();
+        echo json_encode($resultArray);
+        exit;
 
     }
 
