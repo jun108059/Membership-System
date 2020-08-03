@@ -12,7 +12,7 @@
 <div id="login_box">
     <br>
     <h1><div style="text-align: center;">로그인</div></h1>
-    <form action="Login/loginCheck" name="loginForm" method="post" onSubmit="formCheck(); return false;" >
+    <form action="/Login/loginCheck" name="loginForm" method="post" onSubmit="formCheck(); return false;" >
         <table align="center" border="0" cellspacing="0" width="300">
             <tr>
                 <td width="130" colspan="1">
@@ -30,9 +30,9 @@
             <tr>
                 <td colspan="3" align="center" class="mem">
                     <br>
-                    <a href="Membership/signUpEmail">회원가입</a>
+                    <a href="/Membership/signUpEmail">회원가입</a>
                     <br>
-                    <a href="Membership/findMyInfo">아이디 또는 비밀번호 찾기</a>
+                    <a href="/Membership/findMyInfo">아이디 또는 비밀번호 찾기</a>
                 </td>
             </tr>
             <tr>

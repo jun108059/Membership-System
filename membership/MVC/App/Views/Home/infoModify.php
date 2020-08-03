@@ -105,7 +105,7 @@ if (!isset($_SESSION['userID'])) {
 
 <div>
     <br>
-    <input type="button" id="withdrawal" value="회원탈퇴하기"
+    <input type="button" id="withdraw" value="회원탈퇴하기"
            style="color: #fff; background :red; border-radius:0.5em; padding:3px 10px;"
     />
 </div>
@@ -193,11 +193,11 @@ if (!isset($_SESSION['userID'])) {
 
         });
 
-        $('#withdrawal').click(function () {
+        $('#withdraw').click(function () {
             var result = confirm('정말로 탈퇴하시겠습니까?');
             if (result) {
                 //yes
-                location.replace('/Membership/withDraw');
+                location.replace('/Membership/withDrawPage');
             } else {
                 //no - nothing
             }

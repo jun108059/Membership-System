@@ -4,7 +4,7 @@ if(!isset($_SESSION['userID'])) {
 //    echo "<meta http-equiv='refresh' content='0; url=/'>";
     exit;
 }
-
+$_SESSION["userLog"] = (new DateTime())->format('Y-m-d H:i:s');
 ?>
 
 <!DOCTYPE html>
