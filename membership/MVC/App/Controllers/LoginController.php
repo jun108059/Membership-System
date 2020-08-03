@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 use App\Models\Login;
 use App\Service\SessionManager;
+use DateTime;
 
 class LoginController extends \Core\Controller
 {
@@ -38,11 +39,10 @@ class LoginController extends \Core\Controller
 
         //만약 password 와 hash_pw 가 같다면 세션 실행
         if (password_verify($user_pw, $pw_check)) {
-            // 세션 session_start로 수정하기
-            $session_manager = new SessionManager();
-            $session_manager->setSessionValue('userID', $user_id);
-            $session_manager->setSessionValue('userLog', $user_log);
-            $session_manager->update_active_time();
+
+            session_start();
+            $_SESSION["userID"] = $user_id;
+            $_SESSION["userLog"] = (new DateTime())->format('Y-m-d H:i:s');
             View::render('Login/loginOK.html', []);
         } else { // 비밀번호가 같지 않다면 알림창을 띄우고 전 페이지로 돌아갑니다
             echo "<script>alert('❗ 아이디 또는 비밀번호를 확인하세요 ❗'); history.back();</script>";
