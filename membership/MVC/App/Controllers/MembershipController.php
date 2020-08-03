@@ -372,7 +372,7 @@ class MembershipController extends \Core\Controller
         /**
          * 데이터 Update
          */
-        Membership::changeInfo($userData);
+        $user = Membership::changeInfo($userData);
         View::render('Home/index.php', [
             'user_id' => $user['mem_user_id'],
             'user_pw' => $user['mem_password']
@@ -382,6 +382,43 @@ class MembershipController extends \Core\Controller
     }
 
     /***************************** 개인정보수정 끝 **********************************/
+
+    /***************************** 회원 탈퇴 시작 **********************************/
+
+    /**
+     * 회원 탈퇴 로직
+     *
+     */
+    public function withDrawAction()
+    {
+        // 비밀 번호 유효성 검사 - Script 에서 튕기는 코드 작성 후 삭제
+//        MembershipController::passwordCheck($_POST['password']);
+//
+        $now = (new DateTime())->format('Y-m-d H:i:s');
+//        $userData = [
+//            'mem_user_id'   => $_POST['user_id'],
+//            'mem_password'  => password_hash($_POST['password'], PASSWORD_DEFAULT),
+//            'mem_name'      => $_POST['name'],
+//            'mem_phone'     => $_POST['phone'],
+//            'mem_gender'    => $_POST['gender'],
+//            'mem_pw_dt'     => $now, // 마지막 비밀 번호 변경 일시
+//            'mem_log_dt'    => $now
+//        ];
+//
+//        /**
+//         * 데이터 Update
+//         */
+//        $user = Membership::changeInfo($userData);
+        View::render('Membership/withdraw.php', [
+//            'user_id' => $user['mem_user_id'],
+//            'user_pw' => $user['mem_password']
+        ]);
+        return true;
+
+    }
+
+    /***************************** 회원 탈퇴 끝 **********************************/
+
 
     /**
      * Before filter
