@@ -245,7 +245,7 @@ class Membership extends \Core\Model
 
     /**
      * (회원탈퇴) Delete 회원 정보
-     * @param $user // 가입 유저 정보
+     * @param $userData // 가입 유저 정보
      * @return bool $user != 배열 || Null = False
      */
     public static function deleteInfo($userData)
@@ -254,26 +254,55 @@ class Membership extends \Core\Model
         if (empty($userData) || !is_array($userData)) {
             return false;
         }
+
         // DB 연결 > 추상화 Core Model 클래스 - getDB() 호출
         $db = static::getDB();
 
-        // withdraw 탈퇴한 계정 테이블 Insert 추가하기!
+        $user_id = $userData['mem_user_id']; // 탈퇴할 user id
+        $user_log = $userData['mem_log_dt']; // 탈퇴 일자
+        $reason = $userData['reason_detail']; // 탈퇴 사유
 
+        // withdraw 탈퇴한 계정 테이블 Insert
 
+        // mem_idx 가져오기
+        $stmt = $db->prepare("SELECT mem_idx, mem_reg_dt from user WHERE mem_user_id=:userID");
+        $stmt->bindValue(':userID', $user_id, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $row = $stmt ->fetch();
+
+        // user 테이블에서 가져온 값 탈퇴 테이블에 저장하기 위해 bind
         $bindArray = [
-            'password'      => $userData['mem_password'],
-            'name'          => $userData['mem_name'],
-            'phone'         => $userData['mem_phone'],
-            'gender'        => $userData['mem_gender'],
-            'pwDateTime'    => $userData['mem_pw_dt'],
-            'logDateTime'   => $userData['mem_log_dt'],
-            'id'            => $userData['mem_user_id']
+            'mem_idx'       => $row['mem_idx'],
+            'id'            => $user_id,
+            'reg_date'      => $row['mem_reg_dt'],
+            'withdraw_date' => $user_log,
+            'reason'        => 'S',
+            'reason_detail' => $reason
         ];
 
+        // SQL Injection 방지 (placeHolder)
+        $stmt = $db->prepare("INSERT INTO withdraw SET
+                     mem_idx        = :mem_idx,
+                     id             = :id,
+                     reg_date       = :reg_date,
+                     withdraw_date  = :withdraw_date,
+                     reason         = :reason,
+                     reason_detail  = :reason_detail
+        ");
+        // binding 값 넘겨서 실행
+        $stmt->execute($bindArray);
+
+        // user 테이블 삭제하는 코드
         $sql = "DELETE FROM user WHERE mem_user_id = :userID";
 
         $stmt = $db->prepare($sql);
         // binding 값 넘겨서 실행
+
+        $bindArray = [
+            'userID' => $user_id,
+        ];
+
         $stmt->execute($bindArray);
         return true;
         // 에러 처리 필요
@@ -286,10 +315,8 @@ class Membership extends \Core\Model
      * @param $userPw
      * @return bool
      */
-    public static function checkPassword($userId, $userPw)
+    public static function checkPassword($userId)
     {
-        // (수정) 검사는 컨트롤러로 넘겨! 여기서 하는거 아니야
-
         // 추상화 Core Model 클래스 - getDB() 호출
         // DB 연결
         $db = static::getDB();
@@ -297,20 +324,7 @@ class Membership extends \Core\Model
         $stmt = $db->prepare("SELECT mem_password from user WHERE mem_user_id=:userID");
         $stmt->bindValue(':userID', $userId, PDO::PARAM_STR);
         $stmt->execute();
-        $password = $stmt->fetch();
-        print($userPw);
-        print('\n');
-        print_r($password);
-        print('\n');
-        print(password_verify($password['mem_password'], $userPw));
-        exit();
-        return (password_verify($password['mem_password'], $userPw))? true : false;
-
-//        if (password_verify($password['mem_password'], $userPw)) {
-//            return true;
-//        }else {
-//            return false;
-//        }
+        return $stmt->fetch();
     }
 
 
