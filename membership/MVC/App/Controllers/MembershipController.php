@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\Login;
 use App\Models\Membership;
 use App\Service\MailerService;
-use App\Service\SessionManager;
 use \Core\View;
 use DateTime;
 
@@ -224,6 +223,7 @@ class MembershipController extends \Core\Controller
 
     /**
      * PW 찾기를 위한 인증 메일 전송
+     * @throws \Exception
      */
     public function emailForFindPwAction()
     {
@@ -337,7 +337,8 @@ class MembershipController extends \Core\Controller
          */
         Membership::changePassword($userData);
 
-        View::render('Login/index.php', []);
+
+        View::render('/Membership/passwordChangeOK.php', []);
 
         return true;
 
@@ -485,9 +486,9 @@ class MembershipController extends \Core\Controller
     protected function passwordCheck($_password)
     {
         $pw = $_password;
-        $num = preg_match('/[0-9]/u', $pw);
-        $eng = preg_match('/[a-z]/u', $pw);
-        $spe = preg_match("/[\!\@\#\$\%\^\&\*]/u", $pw);
+//        $num = preg_match('/[0-9]/u', $pw);
+//        $eng = preg_match('/[a-z]/u', $pw);
+//        $spe = preg_match("/[\!\@\#\$\%\^\&\*]/u", $pw);
 
         if (strlen($pw) < 8 || strlen($pw) > 21) {
             echo '<script> alert("🔴 비밀번호는 8자리 ~ 20자리 이내로 입력해주세요. 🔴"); history.back(); </script>';
