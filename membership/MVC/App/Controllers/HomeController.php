@@ -11,34 +11,38 @@ class HomeController extends \Core\Controller
 {
     /**
      * 메인 page 로 Rendering
-     * @return void
+     * @return boolean
      */
     public function indexAction()
     {
-//        session_start();
-        $session_manager = new SessionManager();
-        print_r($_SESSION);
-//        exit();
-        //유효한 접근이 아니거나 로그인 유효시간이 지나면 로그인 page 로 이동
-        if (!$session_manager->isValidAccess() || $session_manager->isLoginExpired()) {
-            $session_manager->destroy_session();
+        session_start();
+
+        if (!isset($_SESSION['userID']))
+        {
             echo '<script> alert("🔴잘못된 접근입니다. 로그인 후 이용해주세요!🔴"); </script>';
-            View::render('/Login/index.php', []);
-        } // 로그인 유효 시간 갱신
-        else{
-            $session_manager->update_active_time();
-            View::render('/Home/index.php', [
-                'session' => $session_manager
-            ]);
+            View::render('Login/index.php', []);
+            return false;
+        } elseif ((time() - strtotime($_SESSION['userLog'])) > 1800) //30분동안 활동이 없으면 자동 로그아웃
+        {
+            echo '<script> alert("🔴시간 초과로 로그아웃 되었습니다\n로그인 후 이용해주세요!🔴"); </script>';
+            session_destroy();
+            View::render('Login/index.php', []);
+            return false;
+        } else {
+            $now = (new DateTime())->format('Y-m-d H:i:s');
+            $_SESSION['userLog'] = $now;
+            View::render('/Home/index.php', []);
+            return true;
         }
     }
 
     /**
+     * Home - 개인정보수정 page
      *
+     * @return boolean
      */
     public function infoModifyAction() {
         session_start();
-        print_r($_SESSION);
 
         if (!isset($_SESSION['userID']))
         {
@@ -66,6 +70,6 @@ class HomeController extends \Core\Controller
             'register' => $user['mem_reg_dt'],
             'email' => $user['mem_email']
         ]);
+        return true;
     }
-
 }
