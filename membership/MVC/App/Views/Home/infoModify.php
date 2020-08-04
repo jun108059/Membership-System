@@ -48,10 +48,8 @@ if (!isset($_SESSION['userID'])) {
                 <td><input type="password" size="35" name="password" placeholder="비밀번호(8 ~ 20 글자)"
                            class="memberPw" id="pw1" maxlength="20" required><br><br></td>
                 <td>
-                    <div id="check-pw-success" style="display: none; color: limegreen; font-weight: bold;">&nbsp;🟢사용가능한
-                        비밀번호🟢<br><br></div>
-                    <div id="check-pw-fail" style="display: inline; color: orange; font-weight: bold;">&nbsp;❌8~20자리로
-                        영문, 숫자 포함❌<br><br></div>
+                    <div id="check-pw-success" style="display: none; color: limegreen; font-weight: bold;">&nbsp;🟢사용가능한 비밀번호🟢<br><br></div>
+                    <div id="check-pw-fail" style="display: inline; color: orange; font-weight: bold;">&nbsp;❌8~20자리로 영문, 숫자 포함❌<br><br></div>
                 </td>
 
             </tr>
@@ -60,10 +58,8 @@ if (!isset($_SESSION['userID'])) {
                 <td><input type="password" size="35" name="password2" placeholder="비밀번호 확인"
                            class="memberPw2" id="pw2" maxlength="20" required><br><br></td>
                 <td>
-                    <div id="alert-success" style="display: none; color: blue; font-weight: bold;">&nbsp;✔😄비밀번호
-                        일치😄✔<br><br></div>
-                    <div id="alert-danger" style="display: inline; color: red; font-weight: bold;">&nbsp;❗비밀번호가
-                        다름❗<br><br></div>
+                    <div id="alert-success" style="display: none; color: blue; font-weight: bold;">&nbsp;✔😄비밀번호 일치😄✔<br><br></div>
+                    <div id="alert-danger" style="display: inline; color: red; font-weight: bold;">&nbsp;❗비밀번호가 다름❗<br><br></div>
                 </td>
             </tr>
             <tr>
@@ -98,9 +94,8 @@ if (!isset($_SESSION['userID'])) {
 
 <div>
     <br>
-    <input type="button" id="back" value="뒤로가기""
-    style="color: #fff; background:gray; border-radius:0.5em; padding:3px 10px;"
-    />
+    <input type="button" id="back" value="뒤로가기"
+           style="color: #fff; background:gray; border-radius:0.5em; padding:3px 10px;" />
 </div>
 
 <div>
