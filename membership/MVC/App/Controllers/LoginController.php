@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use \Core\View;
 use App\Models\Login;
-use App\Service\SessionManager;
 use DateTime;
 
 class LoginController extends \Core\Controller
@@ -16,7 +15,14 @@ class LoginController extends \Core\Controller
      */
     public function indexAction()
     {
-        View::render('Login/index.php', []);
+        if(isset($_SESSION['userID'])) {
+            if ($_SESSION['userID'] === 'admin' && $_SESSION['userLevel'] === '1')
+                View::render('Admin/loginOK.html', []);
+            else
+                View::render('Login/loginOK.html', []);
+        }else {
+            View::render('Login/index.php', []);
+        }
     }
 
     /**
@@ -24,18 +30,22 @@ class LoginController extends \Core\Controller
      */
     public function loginCheckAction()
     {
-        //        ★ View 에서 체크
-//        if (empty($user_id) || empty($user_pw)) { // empty 로 빈값 체크
-//            echo '<script> alert(" ❓아이디 또는 패스워드 입력하세요❓"); history.back(); </script>';
-//        }
+
 
         // 각 변수에 ID, PW 저장
         $user_id = $_POST['user_id'];
         $user_pw = $_POST['user_password'];
+
+        // View & Back-end 이중 체크
+        if (empty($user_id) || empty($user_pw)) { // empty 로 빈값 체크
+            echo '<script> alert(" ❓아이디 또는 패스워드 입력하세요❓"); history.back(); </script>';
+        }
+
         // 모델 에서 데이터 꺼내 오기
         $user = Login::getUserData($user_id);
         $pw_check = $user['mem_password'];
-        $user_log = $user['mem_log_dt'];
+//        $user_log = $user['mem_log_dt'];
+
 
         //만약 password 와 hash_pw 가 같다면 세션 실행
         if (password_verify($user_pw, $pw_check)) {
@@ -43,7 +53,12 @@ class LoginController extends \Core\Controller
             session_start();
             $_SESSION["userID"] = $user_id;
             $_SESSION["userLog"] = (new DateTime())->format('Y-m-d H:i:s');
-            View::render('Login/loginOK.html', []);
+            $_SESSION["userLevel"] = $user['mem_level'];
+            if ($_SESSION["userLevel"] === '1') {
+                View::render('Admin/loginOK.html', []);
+            }else {
+                View::render('Login/loginOK.html', []);
+            }
         } else { // 비밀번호가 같지 않다면 알림창을 띄우고 전 페이지로 돌아갑니다
             echo "<script>alert('❗ 아이디 또는 비밀번호를 확인하세요 ❗'); history.back();</script>";
         }
