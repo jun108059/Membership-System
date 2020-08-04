@@ -33,7 +33,7 @@
                 <tr>
                     <td>탈퇴 사유<br><br></td>
                     <td><textarea cols="40" rows="8" name="reason" placeholder="탈퇴 사유를 간단히 작성해주세요.(30자 내)"
-                               class="wd_reason" id="reason" maxlength="30" required ></textarea><br><br></td>
+                                  class="wd_reason" id="reason" maxlength="30" required ></textarea><br><br></td>
                 </tr>
             </table>
             <input type="button" id="withdraw" value="탈퇴하기" />
