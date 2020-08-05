@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>로그인 후 이용하세요!</title>
-    <link rel="stylesheet" type="text/css" href="/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
 </head>
 <body>
 <br>
