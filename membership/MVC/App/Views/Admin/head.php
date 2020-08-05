@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html;
     charset=UTF-8" />
     <title>멤버쉽 시스템</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <script src="/bootstrap/js/bootstrap.min.js"></script>
 </head>
@@ -16,7 +17,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/Admin/index">메인</a></li>
                 <?php if (isset($_SESSION['userID'])) { ?>
-                    <li><a href="">Signed in as <?php echo $_SESSION['userID']; ?></a></li>
+                    <li><a>Signed in as <?php echo $_SESSION['userID']; ?></a></li>
                     <li><a href="/Login/logout">Log Out</a></li>
                 <?php } else { ?>
                     <li><a href="/home">Login</a></li>
