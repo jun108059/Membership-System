@@ -136,7 +136,6 @@ class AdminController extends \Core\Controller
             'user_email'     => $edit_user['mem_email'],
             'user_password'  => $edit_user['mem_password'],
             'user_status'    => $edit_user['mem_status'],
-            'user_cert'      => $edit_user['mem_cert'],
             'user_name'      => $edit_user['mem_name'],
             'user_phone'     => $edit_user['mem_phone'],
             'user_gender'    => $edit_user['mem_gender'],
@@ -154,7 +153,6 @@ class AdminController extends \Core\Controller
      */
     public function userInfoUpdateAction()
     {
-//        session_start();
         // 필수 값 검사
         if (empty($_POST['password']) || empty($_POST['name']) || empty($_POST['phone'])) {
             return false;
@@ -231,7 +229,6 @@ class AdminController extends \Core\Controller
         return true;
 
     }
-
 
 
     /**
