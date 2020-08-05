@@ -53,12 +53,13 @@ class LoginController extends \Core\Controller
         if (password_verify($user_pw, $pw_check)) {
             session_start();
             if ($status_check === 'H') {
-                echo '<script> alert("고객님은 휴면계정입니다!🔒"); history.back(); </script>';
+                echo '<script> alert("고객님은 휴면계정입니다!🔒"); </script>';
                 $_SESSION["userID"] = $user_id;
                 $_SESSION["userEmail"] = $user['mem_email'];
-                // 휴면 계정이라면
-                // 세션 유지할 필요 없음
-                View::render('Login/dormant.php', []);
+                View::render('Login/dormant.php', [
+                    'user_id' =>  $_SESSION["userID"],
+                    'user_email' =>  $_SESSION["userEmail"]
+                ]);
                 exit();
             }
 
