@@ -15,6 +15,7 @@ class LoginController extends \Core\Controller
      */
     public function indexAction()
     {
+        session_start();
         if(isset($_SESSION['userID'])) {
             if ($_SESSION['userID'] === 'admin' && $_SESSION['userLevel'] === '1')
                 View::render('Admin/loginOK.html', []);
@@ -45,12 +46,22 @@ class LoginController extends \Core\Controller
         $user = Login::getUserData($user_id);
         $pw_check = $user['mem_password'];
 //        $user_log = $user['mem_log_dt'];
+        $status_check = $user['mem_status']; // 계정 상태 확인
 
 
         //만약 password 와 hash_pw 가 같다면 세션 실행
         if (password_verify($user_pw, $pw_check)) {
-
             session_start();
+            if ($status_check === 'H') {
+                echo '<script> alert("고객님은 휴면계정입니다!🔒"); history.back(); </script>';
+                $_SESSION["userID"] = $user_id;
+                $_SESSION["userEmail"] = $user['mem_email'];
+                // 휴면 계정이라면
+                // 세션 유지할 필요 없음
+                View::render('Login/dormant.php', []);
+                exit();
+            }
+
             $_SESSION["userID"] = $user_id;
             $_SESSION["userLog"] = (new DateTime())->format('Y-m-d H:i:s');
             $_SESSION["userLevel"] = $user['mem_level'];
