@@ -10,7 +10,6 @@ require_once '../Core/Router.php';
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-
 spl_autoload_register(function ($class){
     $root = dirname(__DIR__); // 부모 directory 저장
     $file = $root . '/' . str_replace('\\', '/', $class) . '.php';
@@ -26,8 +25,13 @@ $router->add('', ['controller' => 'Login', 'action' => 'index']);
 $router->add('home', ['controller' => 'Home', 'action' => 'index']);
 $router->add('posts', ['controller' => 'Posts', 'action' => 'index']);
 $router->add('{controller}/{action}');
-$router->add('{controller}/{id:\d+}/{action}');
+//$router->add('{controller}/{post:\d+}/{action}');
+$router->add('{controller}/{action}/{page:\d+}');
+$router->add('{controller}/{action}/{param:[A-Za-z0-9+]*}');
 $router->add('admin/{controller}/{action}', ['namespace' => 'Admin']);
+
+
+$url = $_SERVER['QUERY_STRING'];
 
 //$router->add('login', ['controller' => 'Login', 'action' => 'index']);
 
