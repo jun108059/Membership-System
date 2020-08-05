@@ -30,7 +30,7 @@ class Membership extends \Core\Model
             'mem_email'     => $user['mem_email'],
             'mem_password'  => $user['mem_password'],
             'mem_status'    => $user['mem_status'],
-            'mem_cert'      => $user['mem_cert'],
+            'mem_dor_mail'      => $user['mem_dor_mail'],
             'mem_name'      => $user['mem_name'],
             'mem_phone'     => $user['mem_phone'],
             'mem_gender'    => $user['mem_gender'],
@@ -45,7 +45,7 @@ class Membership extends \Core\Model
                      mem_email      = :mem_email,
                      mem_password   = :mem_password,
                      mem_status     = :mem_status,
-                     mem_cert       = :mem_cert,
+                     mem_dor_mail   = :mem_dor_mail,
                      mem_name       = :mem_name,
                      mem_phone      = :mem_phone,
                      mem_gender     = :mem_gender,
@@ -308,11 +308,37 @@ class Membership extends \Core\Model
         // 에러 처리 필요
     }
 
+    /**
+     * (휴면전환) 전환 회원 추출
+     * @return array 연관 배열
+     */
+    public static function getDormantUser() {
+        $db = static::getDB();
+
+        // 필요에 따라 date_add
+
+        // date diff <-> datetime 데이터 타입에 맞는지 확인
+
+        // 3일 이상 접속 안한 유저
+        $sql = "SELECT mem_user_id, mem_email FROM user WHERE (datediff(now(), mem_log_dt)>10)";
+
+        $stmt = $db->prepare($sql);
+
+        // binding 값 넘겨서 실행
+        $stmt->execute();
+
+//        $row = $stmt->fetchAll();
+
+        return $stmt->fetchAll();
+
+//        $row = $stmt->fetch();
+//        print_r($row);
+    }
+
 
     /**
      * (삭제예정) 개인 정보 수정 - 현재 Password 일치 여부 검사
      * @param $userId
-     * @param $userPw
      * @return bool
      */
     public static function checkPassword($userId)
@@ -326,6 +352,5 @@ class Membership extends \Core\Model
         $stmt->execute();
         return $stmt->fetch();
     }
-
 
 }
