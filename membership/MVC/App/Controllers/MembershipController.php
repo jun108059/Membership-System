@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Login;
 use App\Models\Membership;
+use App\Service\DormantNotice;
 use App\Service\MailerService;
 use \Core\View;
 use DateTime;
@@ -97,7 +98,7 @@ class MembershipController extends \Core\Controller
             'mem_email' => $_POST['email'],
             'mem_password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
             'mem_status' => 'Y', // enum 타입 - 정상 가입
-            'mem_cert' => 'Y', // enum 타입 - 본인 인증 여부
+            'mem_dor_mail' => 'N', // enum 타입 - 휴면 메일 전송 여부
             'mem_name' => $_POST['name'],
             'mem_phone' => $_POST['phone'],
             'mem_gender' => (!empty($_POST['gender'])) ?: '', // enum 타입
@@ -353,6 +354,7 @@ class MembershipController extends \Core\Controller
      */
     public function newInfoToDBAction()
     {
+        session_start();
         // 필수 값 검사
         if (empty($_POST['password']) || empty($_POST['name']) || empty($_POST['phone'])) {
             return false;
@@ -375,11 +377,10 @@ class MembershipController extends \Core\Controller
         /**
          * 데이터 Update
          */
-        $user = Membership::changeInfo($userData);
-        View::render('Home/index.php', [
-            'user_id' => $user['mem_user_id'],
-            'user_pw' => $user['mem_password']
-        ]);
+        Membership::changeInfo($userData);
+
+        View::render('Home/index.php', []);
+
         return true;
 
     }
@@ -461,6 +462,67 @@ class MembershipController extends \Core\Controller
 
     /***************************** 회원 탈퇴 끝 **********************************/
 
+    /***************************** 휴면 계정 시작 **********************************/
+
+
+    /**
+     * 10일 전 휴면 계정 알림 메일 전송
+     *
+     */
+    public function dormantNoticeMailAction()
+    {
+
+        $userRow = Membership::getDormantUser();
+//        print_r($userRow);
+//        exit();
+        foreach ($userRow as $row) {
+            $userMail = $row['mem_email'];
+            $userID = $row['mem_user_id'];
+
+            DormantNotice::mail($userMail, $userID);
+//            echo("Mailer 함수 주석처리");
+//            echo ('전송완료 : '.$userID.' '.$userMail.'<br>');
+        }
+    }
+
+    /**
+     * 계정 복구 인증 메일 전송
+     */
+    public function dormantReturnMailAction()
+    {
+        session_start();
+
+        $resultArray = ['result' => 'fail', 'alert' => ''];
+
+        if(empty($_SESSION['userEmail'])) {
+            $resultArray['alert'] = '🧨잘못된 접근입니다.';
+            echo json_encode($resultArray);
+            exit();
+        }
+
+        $userMail = $_SESSION['userEmail'];
+        $userID = $_SESSION['userID'];
+
+        if (!Membership::isEmailExisted($userMail)) {
+            $resultArray['alert'] = '🧨가입되지 않은 이메일입니다.';
+            echo json_encode($resultArray);
+            exit();
+        }
+
+        $mailReturn = DormantNotice::mail($userMail, $userID);
+//        $mailReturn = true;
+//        echo("Mailer 함수 주석처리");
+
+        if ($mailReturn) {
+            $resultArray['result'] = 'success';
+        }
+
+        echo json_encode($resultArray);
+        exit;
+    }
+
+
+    /***************************** 휴면 계정 끝 **********************************/
 
     /**
      * Before filter
