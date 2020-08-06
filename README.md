@@ -1,4 +1,4 @@
-# 🐱‍👓 PHP membership system
+# 💳 PHP membership system
 ![HTML](https://img.shields.io/badge/-HTML-orange?logo=HTML5)
 ![CSS](https://img.shields.io/badge/-CSS-blue?logo=CSS3)
 ![JS](https://img.shields.io/badge/-JavaScript-CC9900?logo=JavaScript)
@@ -20,44 +20,67 @@
 
 ---
 
-## 🧮 공부 방향
+## 🎈 필요한 공부
 
-✔ 필요한 지식
+✔ Web 시스템
 
 - [Web Client Side 공부](https://github.com/jun108059/Web-Study/tree/master/Client-side)
 - [Web Server Side 공부](https://github.com/jun108059/Web-Study)
+- [게시판 만들기](Study/bulletin-board)
+- [Ajax 비동기 처리](Study/ajax_json)
+---
+
+## 1. Task 관리
+
+### ✔️사용자 Section
+
+- 회원가입
+- 로그인 + 로그아웃
+- 아이디/비밀번호 찾기
+- 개인정보 수정
+- 회원 탈퇴
+- ⭐휴면 계정 해제
+
+### ✔️관리자 Section
+- 회원 정보 list 검색
+- 정보 상세보기
+- 회원 강제 탈퇴
 
 ---
 
-### 1. 게시판 만들기
-[게시판 php file](bulletin-board)
-- PHP + Nginx + MySQL  
-  - Nginx Stack 공부
-- 게시판에 관리자 `CRUD` 구현
+## 2. WebSite FlowChart
+
+### ✔️사용자 Web page
+
+![img](../img/Web-Users.PNG)
+
+### ✔️관리자 Web page
+
+![img](../img/Web-Admin.PNG)
 
 ---
 
-### 2. 멤버십 기능 구현
+## 3. DB Table 설계
 
-[멤버십 기능 구현](membership)
+**멤버십 Table 구성 정보**  
+`id`, `비밀번호`, `이름`, `생년월일`, `이메일`, `휴대폰번호`, `주소`
 
-  - **사용자**
-    - 회원가입
-    - 로그인 + 로그아웃
-    - 아이디/비밀번호 찾기
-    - 개인정보 수정
-    - 회원 탈퇴
-    - ⭐휴면 계정 해제
-  - **관리자**
-    - 회원 정보 list 검색
-    - 정보 상세보기
-    - 회원 강제 탈퇴
+- 각 기능 별 SubTask 나눠보기
+- 데이터베이스 설계
+- 설계한 이후 WBS 작성
+
+---
+
+## 4. WBS
+Work Breakdown Structure 작성
+
+![img](../img/WBS.png)
 
 ---
 
 ## 🎉 기술 스택
 
-![img](/membership/img/devStack.PNG)
+![img](/img/devStack.PNG)
 
 ---
 
@@ -71,6 +94,3 @@
 - PhpStorm 2020.1.2
 
 ---
-
-
-
