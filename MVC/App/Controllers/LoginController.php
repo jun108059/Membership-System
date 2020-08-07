@@ -57,8 +57,8 @@ class LoginController extends \Core\Controller
 
         //만약 password 와 hash_pw 가 같다면 세션 실행
         if (password_verify($user_pw, $user['mem_password'])) {
+            // 휴면 계정인지 검사
             if ($user['mem_status'] === 'H') {
-                echo '<script> alert("고객님은 휴면계정입니다!🔒"); </script>';
                 $_SESSION["userID"] = $user_id;
                 $_SESSION["userEmail"] = $user['mem_email'];
                 View::render('Login/dormant.php', [
@@ -99,7 +99,6 @@ class LoginController extends \Core\Controller
      */
     public function logoutAction()
     {
-        session_start();
         $userId             = $_SESSION['userID'];
         $user               = Login::getUserData($userId);
         $user['mem_log_dt'] = (new DateTime())->format('Y-m-d H:i:s');

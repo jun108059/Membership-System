@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Dormant;
 use App\Models\Login;
 use App\Models\Membership;
 use App\Service\MailerService;
@@ -272,6 +273,7 @@ class MembershipController extends \Core\Controller
             // Id값 존재 && 올바른 User ID를 입력한 경우
             // 비밀 번호 찾을 User 조회
             $user = Login::getUserData($_POST['user_id']);
+
             // 본인 인증 보낼 메일 값
             $userMail = $user['mem_email'];
             // 인증 번호 random 생성
@@ -456,16 +458,18 @@ class MembershipController extends \Core\Controller
         }
 
         $now = (new DateTime())->format('Y-m-d H:i:s');
-        $userData = [
-            'mem_user_id'   => $_SESSION['userID'],
-            'mem_log_dt'    => $now,
-            'reason_detail' => $_POST['reason']
-        ];
+        $userData = Login::getUserData($_SESSION['userID']);
+        $userData['mem_log_dt'] = $now;
+        $userData['reason_detail'] = $_POST['reason'];
+        $userData['mem_status'] = 'N';
+        $deleteType = "S"; // 스스로 탈퇴
 
         // 회원 정보 DELETE
-        $deleteReturn = Membership::deleteInfo($userData);
+        $insertResult = Dormant::insertWithdraw($userData, $deleteType);
+        $stateChange  = Dormant::stateToDelete($userData);
+        $deleteResult = Dormant::deleteUserData($userData);
 
-        if ($deleteReturn) {
+        if ($insertResult && $stateChange && $deleteResult) {
             $resultArray['result'] = 'success';
         }
         session_destroy();

@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\Login;
 use \Core\View;
-use App\Service\SessionManager;
 use DateTime;
 
 class HomeController extends \Core\Controller
