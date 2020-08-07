@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0406c3d6-c5fd-47b1-b169-3b9e92c68947" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="composer.json" />
+      </list>
+    </option>
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="2" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
+  <component name="ProjectId" id="1fbxmeEDZ7O72nmc5U5cagmUf2k" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../develop/7-end/Membership-System" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\nginx\html\mini_mvc\App\Models" />
+      <recent name="C:\nginx\html\mini_mvc\App\Controllers" />
+      <recent name="C:\nginx\html\mini_mvc\App\Service" />
+      <recent name="C:\nginx\html\mini_mvc\App\Views\Admin" />
+      <recent name="C:\nginx\html\mini_mvc\App\Views\Membership" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0406c3d6-c5fd-47b1-b169-3b9e92c68947" name="Default Changelist" comment="" />
+      <created>1596500753530</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1596500753530</updated>
+      <workItem from="1596500758805" duration="9017000" />
+      <workItem from="1596513795129" duration="3407000" />
+      <workItem from="1596518065673" duration="13093000" />
+      <workItem from="1596586027331" duration="333000" />
+      <workItem from="1596588397597" duration="15234000" />
+      <workItem from="1596608677672" duration="8991000" />
+      <workItem from="1596671731862" duration="27267000" />
+      <workItem from="1596701469407" duration="7119000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="642" y="90" width="600" height="899" key="#PHP" timestamp="1596501188697">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="642" y="90" width="600" height="899" key="#PHP/0.0.1858.1080@0.0.1858.1080" timestamp="1596501188697" />
+    <state x="521" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596528265367">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="521" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1858.1080@0.0.1858.1080" timestamp="1596528265367" />
+    <state x="659" y="295" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1596595031699">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="659" y="295" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1858.1080@0.0.1858.1080" timestamp="1596595031699" />
+    <state x="709" y="295" key="FileChooserDialogImpl" timestamp="1596707781384">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="709" y="295" key="FileChooserDialogImpl/0.0.1858.1080@0.0.1858.1080" timestamp="1596707781384" />
+    <state x="763" y="459" key="NewPhpFileDialog" timestamp="1596684279040">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="763" y="459" key="NewPhpFileDialog/0.0.1858.1080@0.0.1858.1080" timestamp="1596684279040" />
+    <state x="509" y="195" key="com.intellij.database.dbimport.ImportDialog" timestamp="1596675090691">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="509" y="195" key="com.intellij.database.dbimport.ImportDialog/0.0.1858.1080@0.0.1858.1080" timestamp="1596675090691" />
+    <state x="93" y="93" width="1288" height="678" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1596688680763">
+      <screen x="0" y="0" width="1474" height="864" />
+    </state>
+    <state x="93" y="93" width="1288" height="678" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1474.864@0.0.1474.864" timestamp="1596688680763" />
+    <state x="972" y="0" width="780" height="814" key="dock-window-1" timestamp="1596707376151">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="972" y="0" width="780" height="814" key="dock-window-1/0.0.1858.1080@0.0.1858.1080" timestamp="1596707376151" />
+    <state x="173" y="256" width="582" height="568" key="find.popup" timestamp="1596523807775">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="173" y="256" width="582" height="568" key="find.popup/0.0.1858.1080@0.0.1858.1080" timestamp="1596523807775" />
+    <state x="585" y="250" key="run.anything.popup" timestamp="1596695593015">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="585" y="250" key="run.anything.popup/0.0.1858.1080@0.0.1858.1080" timestamp="1596695593015" />
+    <state x="592" y="235" width="672" height="160" key="search.everywhere.popup" timestamp="1596698190400">
+      <screen x="0" y="0" width="1858" height="1080" />
+    </state>
+    <state x="470" y="188" width="672" height="160" key="search.everywhere.popup/0.0.1474.864@0.0.1474.864" timestamp="1596689419309" />
+    <state x="592" y="235" width="672" height="160" key="search.everywhere.popup/0.0.1858.1080@0.0.1858.1080" timestamp="1596698190400" />
+  </component>
+</project>
