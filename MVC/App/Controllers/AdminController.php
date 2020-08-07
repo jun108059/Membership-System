@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
 
+use App\Models\Dormant;
+use App\Models\Login;
 use App\Models\Membership;
 use \Core\View;
 use App\Models\Admin;
@@ -142,7 +144,7 @@ class AdminController extends \Core\Controller
      */
     public function deleteUserAction()
     {
-        if (! $this->checkAdminLogin()) {  // todo
+        if (! $this->checkAdminLogin()) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
                 'back'  => "true"
@@ -159,19 +161,26 @@ class AdminController extends \Core\Controller
             exit();
         }
 
-        $delete_reason = "관리자에 의한 탈퇴";
-
         $now = (new DateTime())->format('Y-m-d H:i:s');
-        $userData = [
-            'mem_user_id'   => $delete_id,
-            'mem_log_dt'    => $now,
-            'reason_detail' => $delete_reason
-        ];
+        $userData = Login::getUserData($delete_id);
+        if($userData['mem_status'] === 'N') {
+            echo "<script> alert('이미 탈퇴한 회원입니다.'); history.back();</script>";
+        }
+        $userData['mem_log_dt'] = $now;
+        $userData['reason_detail'] = "관리자에 의한 탈퇴";
+        $userData['mem_status'] = 'N';
+        $deleteType = "F"; // 관리자 탈퇴
 
-        /** User 강제 DELETE */
-        Membership::deleteInfo($userData);
+        // 회원 정보 DELETE
+        $insertResult = Dormant::insertWithdraw($userData, $deleteType);
+        $stateChange  = Dormant::stateToDelete($userData);
+        $deleteResult = Dormant::deleteUserData($userData);
+        if ($insertResult && $stateChange && $deleteResult) {
+            View::render('Admin/index.php');
+        }else {
+            echo "<script> alert('회원 정보 삭제에서 오류가 발생하였습니다.'); history.back();</script>";
+        }
 
-        View::render('Admin/index.php');
     }
 
     /**
