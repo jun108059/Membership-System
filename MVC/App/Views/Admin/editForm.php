@@ -71,20 +71,21 @@ include('head.php');
             <tr>
                 <td><label class="control-label">이름</label></td>
                 <td><input type="text" name="name" value="<?php echo $user_name; ?>" placeholder="이름 2 ~ 20 글자" autocomplete="off"
-                           class="form-control" readonly onfocus="this.removeAttribute('readonly');" required></td>
+                           class="form-control" id="name" readonly onfocus="this.removeAttribute('readonly');" required></td>
                 <td>
-                    <label class="control-label" id="name-available" style="display: none; color: blue; font-weight: bold;"> ✔사용 가능한 이름입니다.</label>
-                    <label class="control-label" id="name-disable" style="display: inline; color: red; font-weight: bold;"> ❌이름은 한글 또는 영문 (2~20)</label>
+                    <div id="name-available" style="display: none; color: blue; font-weight: bold;"> ✔사용 가능한 이름입니다.</div>
+                    <div id="name-disable" style="display: none; color: red; font-weight: bold;"> ❌이름은 한글 또는 영문 (2~20)</div>
+                    <div id="previous-name" style="display: inline; color: cadetblue; font-weight: bold;"> ♻원래 이름 유지하기</div>
                 </td>
             </tr>
             <tr>
                 <td><label class="control-label">전화번호</label></td>
-                <td><input type="text" name="phone" value="<?php echo $user_phone; ?>" placeholder="010-1234-1234" autocomplete="off"
-                           id="tell" class="form-control" title="010-1234-1234 형식" maxlength="13"
+                <td><input type="text" name="phone" value="<?php echo $user_phone; ?>" placeholder="<?php echo $user_phone; ?>" autocomplete="off"
+                           id="phone" class="form-control" title="010-1234-1234 형식" maxlength="13"
                            readonly onfocus="this.removeAttribute('readonly');" required></td>
                 <td>
-                    <div>&nbsp;</div>
-                </td>
+                    <div id="check_phone_mention">&nbsp;실시간 전화번호 체크</div>
+                    <br></td>
             </tr>
             <tr>
                 <td><label class="control-label">User 권한</label></td>
@@ -129,6 +130,8 @@ include('head.php');
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        // 전화번호 중복검사 시 필요
+        var checkPhoneMention = $('#check_phone_mention');
 
         // 비밀 번호 글자 수 유효성 검사
         $("#pw1").on("keyup", function () {
@@ -151,7 +154,7 @@ include('head.php');
 
             // Null 확인
             if (pwd1 && !pwd2) {
-                null;
+
             } else if (pwd1 || pwd2) {
                 if (pwd1 === pwd2) {
                     $("#alert-success").css('display', 'inline');
@@ -164,40 +167,68 @@ include('head.php');
                 }
             }
         });
-
-        // ID focus out 됐을 때 실행 & 전화 번호 중복 검사
-        $("#tell").on("blur", function () {
-            // 중복 검사 로직
-            let tellReg = /^\d{3}-\d{3,4}-\d{4}$/;
-            if (!tellReg.test($(this).val())) {
-                alert("❌전화번호 형식으로 입력해주세요.❌");
-                $("#collect_tell_reg").val('n');
-            } else {
-                $("#collect_tell_reg").val('y');
-            }
-            $self = $(this);
-            $.post( //post 방식으로 user id 값 넘기기
-                "/Membership/checkPhone",
-                {phone: $(this).val()},
-                function (data) {
-                    if (data === '<span class=\'status-available\'> 🟢사용 가능한 번호입니다.🟢</span>') {
-                        $self.parent().parent().find("div").html(data); //div태그를 찾아 html방식으로 data를 뿌려줍니다.
-                        $self.parent().parent().find("div").css("color", "#00FF99"); //div 태그를 찾아 css효과로 빨간색을 설정합니다
-                        $('#collect_tell').val('y');
-                    } else { //만약 data 값이 전송 되면
-                        //if(($(this).val()) === (<?php //echo $user_phone; ?>//)) {
-                        //    data = '<span class=\'status-available\'> 🟡현재 번호를 유지합니다.🟡</span>'
-                        //    $self.parent().parent().find("div").html(data); //div태그를 찾아 html방식으로 data를 뿌려줍니다.
-                        //    $self.parent().parent().find("div").css("color", "#FF0"); //div 태그를 찾아 css효과로 빨간색을 설정합니다
-                        //    $('#collect_tell').val('y');
-                        //}else {
-                        $self.parent().parent().find("div").html(data); //div태그를 찾아 html방식으로 data를 뿌려줍니다.
-                        $self.parent().parent().find("div").css("color", "#F00"); //div 태그를 찾아 css효과로 빨간색을 설정합니다
-                        $("#collect_tell").val('n');
-                        // }
-                    }
+        var prevUserName = "<?php echo $user_name; ?>";
+        // 이름 유효성 검사
+        $("#name").on("keyup", function () {
+            // 사용하던 이름이 아니면
+            if (prevUserName !== $(this).val()) {
+                var nameReg = /^[^0-9][^`~!@#$%^&*|\\\'\";:\/?]{2,20}$/;
+                if (!nameReg.test($("#name").val())) {
+                    $("#name-disable").css('display', 'inline');
+                    $("#name-available").css('display', 'none');
+                    $("#previous-name").css('display', 'none');
+                    $("#collect_name").val('n');
+                } else {
+                    $("#name-disable").css('display', 'none');
+                    $("#name-available").css('display', 'inline');
+                    $("#previous-name").css('display', 'none');
+                    $('#collect_name').val('y');
                 }
-            );
+            } else {
+                // 이전에 사용하던 이름이라면
+                $("#name-disable").css('display', 'none');
+                $("#name-available").css('display', 'none');
+                $("#previous-name").css('display', 'inline');
+                $('#collect_name').val('y');
+            }
+        });
+
+        var prevPhoneNumber = "<?php echo $user_phone; ?>";
+        // 전화번호 중복 검사
+        $("#phone").on("keyup", function (e) { //checkId 클래스에 입력을 감지
+            // 한글 방지
+            if (!(e.keyCode >= 37 && e.keyCode <= 40)) {
+                var v = $(this).val();
+                $(this).val(v.replace(/[^a-z0-9-]/gi, ''));
+            }
+            // 사용하던 전화번호이면
+            if (prevPhoneNumber === v) {
+                checkPhoneMention.html("♻ 이전 전화번호 유지하기");
+                checkPhoneMention.css("color", "#0066FF"); // css 입히기
+                $('#collect_tell').val('y');
+                return;
+            }
+            var inputPhone = $("#phone").val();
+            $.ajax({
+                url: "/Membership/checkPhone",
+                method: 'POST',
+                data: {phone: inputPhone},
+                dataType: "json",
+                async: false
+            }).done(function (data) {
+                checkPhoneMention.html(data.mention);
+                if (data.status === 'check') {
+                    checkPhoneMention.css("color", "#FFB300"); // css 입히기
+                    $('#collect_tell').val('n');
+                } else if (data.status === 'available') {
+                    checkPhoneMention.css("color", "#00FF99"); // css 입히기
+                    $('#collect_tell').val('y');
+                } else {
+                    checkPhoneMention.css("color", "#F00"); // css 입히기
+                    $('#collect_tell').val('n');
+                }
+                return false;
+            });
         });
 
         $("#form_sub").click(function () {
@@ -208,9 +239,13 @@ include('head.php');
                 alert('비밀번호는 8~20자리로 영문, 숫자를 포함해주세요.');
                 return false;
             } else if ($('#collect_tell').val() !== 'y') {
-                alert('사용 중인 전화번호입니다.');
+                alert('전화번호를 확인해주세요.');
+                return false;
+            } else if ($('#collect_name').val() !== 'y') {
+                alert('이름 형식에 맞게 입력해주세요.');
                 return false;
             }
+
             alert("🎉회원정보 수정이 완료되었습니다!");
             $('#form').submit();
         });
