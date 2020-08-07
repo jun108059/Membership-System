@@ -44,7 +44,7 @@ include('head.php');
             </thead>
 
             <tbody>
-                <?php foreach ($userData as $row) { ?>
+            <?php foreach ($userData as $row) { ?>
                 <tr>
                     <td><?php echo $row['mem_idx'];?></td>
                     <td><?php echo $row['mem_user_id'];?></td>
@@ -62,8 +62,8 @@ include('head.php');
                             <span class="glyphicon glyphicon-remove"></span>Del</a></td>
                 </tr>
                 <?php
-                }
-                ?>
+            }
+            ?>
             </tbody>
         </table>
     </div>
@@ -81,5 +81,5 @@ include('head.php');
     </div>
 
 
-    </body>
-    </html>
+</body>
+</html>

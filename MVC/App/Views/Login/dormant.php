@@ -7,6 +7,8 @@
 
 <body>
 <form id="myForm" action="/Dormant/dormantRelease" method="post" >
+    <script> alert("고객님은 휴면계정입니다!🔒"); </script>
+
     <h1>고객님은 휴면계정 상태입니다🔒</h1>
 
     <h2>Email 본인 인증을 통해 복구하세요!</h2>
@@ -35,7 +37,6 @@
             <strong>인증번호</strong>
             <input type="text" name="cert_num" id="cert_num" size="20" placeholder="6자리 숫자" maxlength="6"/>
             <input type="submit" value="인증하기" id="cert_num_btn" />
-            <!--            <a href="/Membership/signUp" id="cert_num_btn">인증하기</a>-->
         </p>
         <div id="timeView">인증 시간 : </div>
         <p id="result"></p>
@@ -70,8 +71,8 @@
 
     $(function () {
         $('#send_email_btn').click(function () {
-            var email = $('#email').val(),
-            if (email === '') {
+            var email = $('#email').val();
+            if (email === "") {
                 alert('잘못된 접근입니다.');
             }
             $.ajax({
@@ -81,7 +82,6 @@
                 dataType: "json",
                 async: false
             }).done(function (data) {
-                // alert(data.result);
                 if (data.result === 'success') {
                     alert('이메일이 전송되었습니다.\n3분 내로 본인인증을 완료해주세요.');
                     timer();

@@ -126,7 +126,7 @@
                     $('#certify_num_area').show();
                     $("#user_id").attr("readonly", true);
                 } else if (data.alert !== ''){
-                alert(data.alert);
+                    alert(data.alert);
                 }else{
                     alert("오류가 발생했습니다.");
                 }

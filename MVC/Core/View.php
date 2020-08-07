@@ -33,24 +33,4 @@ class View
         }
     }
 
-    /**
-     * @param string $template
-     * @param array $args
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public static function renderTemplate(string $template, array $args = [])
-    {
-        static $twig = null;
-
-        if ($twig === null)
-        {
-            $loader = new \Twig\Loader\FilesystemLoader('../App/Views');
-            $twig = new \Twig\Environment($loader);
-        }
-
-        echo $twig->render($template, $args);
-    }
-
 }

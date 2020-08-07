@@ -1,7 +1,6 @@
 <?php
 if (!isset($_SESSION['userID'])) {
     echo '<script> alert("🧨잘못된 접근입니다.(home/index.php)"); history.back(); </script>';
-//    echo "<meta http-equiv='refresh' content='0; url=/'>";
     exit;
 }
 ?>
@@ -192,12 +191,13 @@ if (!isset($_SESSION['userID'])) {
             }
 
             var inputPhone = $("#phone").val();
+            console.log(inputPhone);
             $.ajax({
                 url: "/Membership/checkPhone",
                 method: 'POST',
                 data: {phone: inputPhone},
                 dataType: "json",
-                async: false
+                async: true
             }).done(function (data) {
                 checkPhoneMention.html(data.mention);
                 if (data.status === 'check') {

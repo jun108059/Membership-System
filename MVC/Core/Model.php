@@ -31,7 +31,7 @@ abstract class Model
             try {
                 // DB 연결 코드
                 $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8",
-                              $username, $password);
+                    $username, $password);
 
             } catch (PDOException $e) {
                 echo $e->getMessage();

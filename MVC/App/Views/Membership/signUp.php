@@ -53,8 +53,8 @@
                 <td><input type="text" size="35" name="name" placeholder="이름 2 ~ 20 글자"
                            class="memberName" id="name" maxlength="20" required><br><br></td>
                 <td>
-                <div id="name-available" style="display: none; color: blue; font-weight: bold;"> ✔사용 가능한 이름입니다.<br><br></div>
-                <div id="name-disable" style="display: inline; color: red; font-weight: bold;"> ❌이름은 한글 또는 영문 (2~20)<br><br></div>
+                    <div id="name-available" style="display: none; color: blue; font-weight: bold;"> ✔사용 가능한 이름입니다.<br><br></div>
+                    <div id="name-disable" style="display: inline; color: red; font-weight: bold;"> ❌이름은 한글 또는 영문 (2~20)<br><br></div>
                 </td>
             </tr>
             <tr>

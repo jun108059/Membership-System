@@ -24,7 +24,7 @@ class MailerService
             $mail->Host = "smtp.naver.com";               // 네이버의 smtp 서버
             $mail->SMTPAuth = true;                         // SMTP 인증을 사용함
             $mail->Username = "jun108059@naver.com";    // 메일 계정 (지메일일경우 지메일 계정)
-            $mail->Password = "************";                  // 메일 비밀번호
+            $mail->Password = "**************";                  // 메일 비밀번호
             $mail->SMTPSecure = "ssl";                       // SSL을 사용함
             $mail->Port = 465;                                  // email 보낼때 사용할 포트를 지정
             $mail->CharSet = "utf-8"; // 문자셋 인코딩
@@ -32,7 +32,7 @@ class MailerService
             $mail->setFrom("jun108059@naver.com", "박영준");
             // 받는 메일
             $mail->addAddress($receiver, "receive01");
-            $mail->addAddress("youngjun108059@gmail.com", "receive02");
+//            $mail->addAddress("youngjun108059@gmail.com", "receive02");
             // 첨부파일
             //    $mail->addAttachment("./test1.zip");
             //    $mail->addAttachment("./test2.jpg");

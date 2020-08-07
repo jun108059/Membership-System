@@ -20,15 +20,6 @@ $_SESSION["userLog"] = (new DateTime())->format('Y-m-d H:i:s');
 <br><br>
 <a href="/Home/infoModify"><input type="button" value="개인정보수정" /></a>
 <a href="/Login/logout"><input type="button" value="로그아웃" /></a>
-<!--<script type="text/javascript" src="//code.jquery.com/jquery.min.js"></script>-->
-<!--<script>-->
-<!--    $.ajax({-->
-<!--        url: "/Home/myName",-->
-<!--        type: "GET",-->
-<!--    }).done(function(data) {-->
-<!--        $('#name').text(data);-->
-<!--    });-->
-<!--</script>-->
 </body>
 </html>
 

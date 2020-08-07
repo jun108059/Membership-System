@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use PDO;
-use PDOException;
 
 /**
  * Login model
@@ -11,40 +10,30 @@ use PDOException;
 class Login extends \Core\Model
 {
 
+    /**
+     * (User 정보) 입력받은 id 일치하는 User 정보 가져오기
+     * @param $userId
+     * @return array|mixed
+     */
     public static function getUserData($userId)
     {
         if (empty($userId)){
             return [];
         }
-
-        // DB 연결 - Abstract Core Model 클래스 - getDB() 호출
+        // 입력받은 id 일치하는 User 정보 가져오기
         $db = static::getDB();
-        // 쿼리를 담은 PDOStatement 객체 생성 - return PDOStatement 객체
         $stmt = $db->prepare("SELECT * FROM user WHERE mem_user_id = :user_id");
-
-        // PDOStatement 객체가 가진 쿼리의 parameter 에 변수 값을 바인드
         $stmt->bindValue(":user_id", $userId, PDO::PARAM_STR);
-
-        // PDOStatement 객체가 가진 쿼리를 실행
         $stmt->execute();
-
-        return $stmt->fetch();
-    }
-
-    public static function LoginCheck()
-    {
-        // 세션이 유지 되고 있는지 확인 하기!
-        try {
-
-            // 추상화 Core Model 클래스 - getDB() 호출
-            // DB 연결
-            $db = static::getDB();
-
-            $stmt = $db->query('SELECT mem_user_id, mem_password FROM user');
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        } catch (PDOException $e) {
-            echo $e->getMessage();
+        $row = $stmt->fetch();
+        if ($row['mem_status'] === 'H') {
+            // 휴면계정 일 경우
+            $stmt2 = $db->prepare("SELECT * FROM dormant WHERE mem_user_id = :user_id");
+            $stmt2->bindValue(":user_id", $userId, PDO::PARAM_STR);
+            $stmt2->execute();
+            return $stmt2->fetch();
+        }else {
+            return $row;
         }
     }
 
@@ -59,21 +48,17 @@ class Login extends \Core\Model
         if (empty($userData) || !is_array($userData)) {
             return false;
         }
-
-        // 추상화 Core Model 클래스 - getDB() 호출
-        // DB 연결
         $db = static::getDB();
 
         $bindArray = [
             'dateTime'  => $userData['mem_log_dt'],
             'id'        => $userData['mem_user_id']
         ];
+        // 최근 로그인 시간 Update 쿼리
         $sql = "UPDATE user SET mem_log_dt = :dateTime WHERE mem_user_id = :id";
         $stmt = $db->prepare($sql);
-        // binding 값 넘겨서 실행
         $stmt->execute($bindArray);
         return true;
-        // 에러 처리 필요
     }
 
     /**

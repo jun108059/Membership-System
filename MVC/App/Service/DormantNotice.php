@@ -16,8 +16,8 @@ class DormantNotice
     {
         $mail = new PHPMailer(true);
         try {
-            // 3일 뒤 날짜
-            $timestamp = strtotime("+3 day");
+            // 30일 뒤 날짜
+            $timestamp = strtotime("+30 day");
             // 날짜 형식으로 변경
             $changeDormantDate = date("Y-m-d", $timestamp);
             // 서버세팅
@@ -28,7 +28,7 @@ class DormantNotice
             $mail->Host = "smtp.naver.com";               // 네이버의 smtp 서버
             $mail->SMTPAuth = true;                         // SMTP 인증을 사용함
             $mail->Username = "jun108059@naver.com";    // 메일 계정 (지메일일경우 지메일 계정)
-            $mail->Password = "************";                  // 메일 비밀번호
+            $mail->Password = "***************";                  // 메일 비밀번호
             $mail->SMTPSecure = "ssl";                       // SSL을 사용함
             $mail->Port = 465;                                  // email 보낼때 사용할 포트를 지정
             $mail->CharSet = "utf-8"; // 문자셋 인코딩
@@ -43,21 +43,19 @@ class DormantNotice
             // 메일 내용
 
             $mail->isHTML(true); // HTML 태그 사용 여부
-            $mail->Subject = "[멤버쉽 시스템] 휴면 전환 예정 알림 메일";  // 메일 제목
+            $mail->Subject = "[멤버쉽 시스템] 휴면 전환 알림";  // 메일 제목
             $mail->Body = "안녕하세요. 멤버쉽 시스템 입니다.<br><br>
 
             ‘정보통신망 이용촉진 및 정보보호에 관한 법률 제 29조’에 따라 회원님의 아이디가
-            3일 뒤 휴면 전환 될 예정입니다.<br><br>
+            휴면 전환되었습니다.<br><br>
             
-            휴면으로 전환되는 경우 서비스 이용이 제한됩니다.<br>
-            ❤아직은 아무 기능이 없지만요.😄❤<br>
-            원활한 서비스 이용을 위해 '멤버쉽 시스템' 에 로그인 해 주세요.<br><br>
+            30일 뒤 고객님의 계정 정보가 완전히 파기됩니다.<br><br>
+
+            고객님의 가입 정보를 유지하고 서비스를 이용하시려면 '멤버쉽 시스템' 에 로그인 해 주세요.<br><br>
             
             고객님의 ID는 [ {$userID} ] 입니다.<br><br>
             
-            휴면계정 전환일은 [ {$changeDormantDate} ] 입니다.<br><br>
-            
-            근데 지금 테스트 중이니까 바로 전환시킬게요! 미안해요!💦<br>
+            계정 파기일은 [ {$changeDormantDate} ] 입니다.<br><br>
             ";     // 메일 내용
 
             // Gmail로 메일을 발송하기 위해서는 CA인증이 필요하다.
