@@ -87,7 +87,7 @@ class DormantController extends \Core\Controller
             View::render('Error/errorPage.php');
             exit;
         }
-
+        // 휴면 Table 에서 User 정보 가져오기
         $userData = Dormant::getUserInfo($_POST['email']);
 
         $now = (new DateTime())->format('Y-m-d H:i:s');
@@ -95,15 +95,29 @@ class DormantController extends \Core\Controller
         $userData['mem_log_dt'] = $now; // 마지막 로그인 일시
         $userData['mem_status'] = 'Y';
 
-        // 휴면 해제 상태 DB 저장
-        Dormant::releaseDormant($userData);
-
-        // SignUp 완료 -> rendering
-        View::render('Membership/signUpOK.php', [
-            'id' => $userData['mem_user_id'],
-            'name' => $userData['mem_name'],
-            'email' => $userData['mem_email']
-        ]);
+        // 휴면 해제 -> 회원 복구 DB 저장
+        $dormantType = "OUT";
+        if(Dormant::releaseDormant($userData)) {
+            // 회원 복구 성공 시 delete 휴면 계정
+            if(!Dormant::deleteDormant($userData)) {
+                View::render('Error/errorPage.php', [
+                    'alert' => "오류가 발생했습니다. 휴면 해제를 재시도 해주세요.",
+                    'back' => "ture"
+                ]);
+                exit();
+            } else {
+                // Delete 성공 시 휴면 로그 테이블 저장 성공
+                if(!Dormant::logDormantTable($userData, $dormantType)){
+                    View::render('Error/errorPage.php', [
+                        'alert' => "로그 저장 오류가 발생했습니다.",
+                        'back' => "ture"
+                    ]);
+                    exit();
+                }
+            }
+        }
+        // 휴면 해제 완료 -> 로그인 페이지
+        View::render('Login/index.php');
     }
 
     /***************************** 휴면 계정 끝 **********************************/
