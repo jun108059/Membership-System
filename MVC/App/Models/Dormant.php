@@ -98,7 +98,7 @@ class Dormant extends \Core\Model
 
 
     /**
-     * (휴면 해제) user DB Update
+     * (휴면 해제 1) 회원 Table 복구 Update
      * @param $userData
      * @return bool
      */
@@ -113,29 +113,90 @@ class Dormant extends \Core\Model
         $db = static::getDB();
 
         $bindArray = [
+            'idx'           => $userData['mem_idx'],
             'email'         => $userData['mem_email'],
+            'password'      => $userData['mem_password'],
+            'status'        => $userData['mem_status'],
             'dormantMail'   => $userData['mem_dor_mail'],
+            'name'        => $userData['mem_name'],
+            'phone'        => $userData['mem_phone'],
+            'gender'        => $userData['mem_gender'],
+            'level'        => $userData['mem_level'],
+            'regDateTime'   => $userData['mem_reg_dt'],
             'logDateTime'   => $userData['mem_log_dt'],
-            'status'        => $userData['mem_status']
+            'pwDateTime'   => $userData['mem_pw_dt'],
         ];
-
+        // 회원 정보 복구
         $sql = "UPDATE user SET 
+                mem_email    = :email, 
+                mem_password    = :password, 
+                mem_status      = :status,
                 mem_dor_mail    = :dormantMail, 
+                mem_name    = :name, 
+                mem_phone    = :phone, 
+                mem_gender    = :gender, 
+                mem_level    = :level, 
+                mem_reg_dt      = :regDateTime,
                 mem_log_dt      = :logDateTime,
-                mem_status      = :status
-                WHERE mem_email = :email";
+                mem_pw_dt      = :pwDateTime
+                WHERE mem_idx = :idx";
 
         $stmt = $db->prepare($sql);
-
         // binding 값 넘겨서 실행
         $stmt->execute($bindArray);
+        return true;
 
+    }
+
+    /**
+     * (휴면 해제 2) 휴면 Table 회원 Delete
+     * @param $userData // 가입 유저 정보
+     * @return bool $user != 배열 || Null = False
+     */
+    public static function deleteDormant($userData)
+    {
+        // $user = 배열 && !Null 검사
+        if (empty($userData) || !is_array($userData)) {
+            return false;
+        }
+
+        // DB 연결 > 추상화 Core Model 클래스 - getDB() 호출
+        $db = static::getDB();
+
+        $user_id = $userData['mem_user_id']; // 탈퇴할 user id
+
+        // user 테이블 삭제하는 코드
+        $sql = "DELETE FROM dormant WHERE mem_user_id = :userID";
+
+        $stmt = $db->prepare($sql);
+        $bindArray = [
+            'userID' => $user_id,
+        ];
+        $stmt->execute($bindArray);
+        return true;
+    }
+
+    /**
+     * (휴면 전환&복구) 로그 테이블 업데이트
+     * @param $userData
+     * @param $dormantType
+     * @return bool
+     */
+    public static function logDormantTable($userData, $dormantType)
+    {
+        // $user = 배열 && !Null 검사
+        if (empty($userData) || !is_array($userData)) {
+            return false;
+        }
+
+        // DB 연결
+        $db = static::getDB();
 
         // 휴면 전환 로그 binding Value
         $bindArray = [
             'mem_idx'    => $userData['mem_idx'],
             'id'         => $userData['mem_user_id'],
-            'dormant_status' => 'OUT',
+            'dormant_status' => $dormantType,
             'dormant_dt' => $userData['mem_log_dt']
         ];
 
@@ -164,7 +225,7 @@ class Dormant extends \Core\Model
         // DB 연결
         $db = static::getDB();
 
-        $stmt = $db->prepare("SELECT * from user WHERE mem_email=:email");
+        $stmt = $db->prepare("SELECT * from dormant WHERE mem_email=:email");
         $stmt->bindValue(':email', $email,PDO::PARAM_STR);
         // PDO Statement 객체가 가진 쿼리 실행
         $stmt->execute();
