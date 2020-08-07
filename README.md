@@ -52,11 +52,11 @@
 
 ### ✔️사용자 Web page
 
-![img](../img/Web-Users.PNG)
+![img](/img/Web-Users.PNG)
 
 ### ✔️관리자 Web page
 
-![img](../img/Web-Admin.PNG)
+![img](/img/Web-Admin.PNG)
 
 ---
 
@@ -74,7 +74,7 @@
 ## 4. WBS
 Work Breakdown Structure 작성
 
-![img](../img/WBS.png)
+![img](/img/WBS.png)
 
 ---
 
