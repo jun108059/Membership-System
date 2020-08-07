@@ -432,7 +432,6 @@ class MembershipController extends \Core\Controller
             'mem_user_id'   => $user_id,
             'mem_user_pw'   => $user_pw,
             'mem_log_dt'    => $now,
-//            'reason_detail' => $_POST['reason']
         ];
 
 
@@ -455,7 +454,7 @@ class MembershipController extends \Core\Controller
         $resultArray = ['result' => 'fail', 'alert' => '',
             'userId' => $_SESSION['userID'],
             'reason' => $_POST['reason']
-            ];
+        ];
 
         if (empty($_SESSION['userID']) || empty($_POST['reason'])) {
             $resultArray['alert'] = '🧨잘못된 접근입니다.';
