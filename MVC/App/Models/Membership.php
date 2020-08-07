@@ -91,8 +91,16 @@ class Membership extends \Core\Model
         $stmt = $db->prepare("SELECT mem_email from user WHERE mem_email=:email");
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-
-        return $stmt->rowCount() > 0;
+        $row = $stmt->fetch();
+        if (empty($row['mem_email'])) {
+            // 휴면계정 일 경우
+            $stmt2 = $db->prepare("SELECT * FROM dormant WHERE mem_email=:email");
+            $stmt2->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt2->execute();
+            return $stmt2->rowCount() > 0;
+        }else {
+            return $stmt->rowCount() > 0;
+        }
     }
 
     /**
@@ -280,17 +288,12 @@ class Membership extends \Core\Model
 
         // user 테이블 삭제하는 코드
         $sql = "DELETE FROM user WHERE mem_user_id = :userID";
-
         $stmt = $db->prepare($sql);
-        // binding 값 넘겨서 실행
-
         $bindArray = [
             'userID' => $user_id,
         ];
-
         $stmt->execute($bindArray);
         return true;
-        // 에러 처리 필요
     }
 
     /**
@@ -305,12 +308,8 @@ class Membership extends \Core\Model
         if (empty($userData) || !is_array($userData)) {
             return false;
         }
-
-        // 추상화 Core Model 클래스 - getDB() 호출
         // DB 연결
         $db = static::getDB();
-
-
         $now = (new DateTime())->format('Y-m-d H:i:s');
         $bindArray = [
             'mem_idx'    => $userData['mem_idx'],
@@ -321,7 +320,6 @@ class Membership extends \Core\Model
             'err_detail' => 'None',
             'email_type' => $type
         ];
-
         // 이메일 전송 테이블 Insert 쿼리
         $sql = "INSERT INTO email_send_log SET
                      mem_idx        = :mem_idx,
@@ -333,11 +331,8 @@ class Membership extends \Core\Model
                      email_type     = :email_type
         ";
         $stmt = $db->prepare($sql);
-        // binding 값 넘겨서 실행
         $stmt->execute($bindArray);
-
         return true;
-        // 에러 처리 필요
     }
 
 
