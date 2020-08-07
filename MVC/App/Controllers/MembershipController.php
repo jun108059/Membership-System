@@ -16,18 +16,15 @@ class MembershipController extends \Core\Controller
 {
     /**
      * 1번 : 이메일 인증 Page
-     * Render - View
      */
     public function certifyEmailAction()
     {
         // View 페이지 렌더링 해주기
-        View::render('Membership/certifyEmail.php',);
+        View::render('Membership/certifyEmail.php');
     }
 
     /**
      * 2번 : 이메일 인증 번호 전송
-     * Check - 메일 중복 & 인증 번호 전송
-     * Render - VIew
      * @throws Exception
      */
     public function sendMailAction()
@@ -50,9 +47,7 @@ class MembershipController extends \Core\Controller
 
         $certify = random_int(100000, 999999); // 인증 번호 random 생성
 
-//        $mailReturn = MailerService::mail($userMail, $certify);
-        // todo 이메일 테스트 코드 지우기
-        $mailReturn = true;
+        $mailReturn = MailerService::mail($userMail, $certify);
 
         if ($mailReturn) {
             $resultArray['result'] = 'success';
@@ -65,12 +60,11 @@ class MembershipController extends \Core\Controller
 
     /**
      * 3번 : 회원 가입 Page Render
-     * Render - View Sign Up
      */
     public function signUpAction()
     {
         if (empty($_POST['email']) || empty($_POST['emadress'])) {
-            // 에러 페이지 출력
+            // Error Handling
             View::render('Error/errorPage.php', [
                 'alert' => "이메일 정보를 입력해주세요.",
                 'back' => "ture"
@@ -205,11 +199,11 @@ class MembershipController extends \Core\Controller
     }
 
     /***************************** 중복 검사 끝    ************************************/
+
     /***************************** ID/PW 찾기 시작 ************************************/
 
     /**
      * 아이디/비밀번호 찾기 Page Render
-     * Render - View findMyInfo
      */
     public function findMyInfoAction()
     {
@@ -218,13 +212,12 @@ class MembershipController extends \Core\Controller
 
     /**
      * ID 찾기(AJAX) 아이디 alert 창 띄우기
-     *
      */
     public function findIdAction()
     {
         $resultArray = ['result'=>'fail', 'status' =>'check', 'alert' => '', 'userID' => ''];
 
-        // front 검사 + 이중 검사
+        // front 검사 + Back 이중 검사
         if (empty($_POST['email']) || empty($_POST['emadress'])) {
             $resultArray['alert'] = '이메일을 입력해주세요.';
             echo json_encode($resultArray);
@@ -306,10 +299,10 @@ class MembershipController extends \Core\Controller
 
     /**
      * 비밀번호 재설정 Page Render
-     * Render - View PasswordChange
      */
     public function passwordChangeAction()
     {
+        // Id값 존재 && 올바른 User ID를 입력하지 않은 경우 Error Handling
         if(empty($_POST['user_id']) && Membership::isUserExisted($_POST['user_id'])){
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다❗",
@@ -318,7 +311,6 @@ class MembershipController extends \Core\Controller
             exit();
         }
 
-        // Id값 존재 && 올바른 User ID를 입력한 경우
         // user 정보 조회
         $user = Login::getUserData($_POST['user_id']);
 
@@ -335,13 +327,11 @@ class MembershipController extends \Core\Controller
             'user_pw' => $user['mem_password']
         ]);
 
-
     }
 
 
     /**
      * 비밀번호 재설정 이후 DB 저장!
-     *
      */
     public function newPwToDBAction()
     {
@@ -375,11 +365,11 @@ class MembershipController extends \Core\Controller
     }
 
     /***************************** ID/PW 찾기 끝 ************************************/
+
     /***************************** 개인정보수정 시작 **********************************/
 
     /**
      * 개인정보 변경 DB 저장!
-     *
      */
     public function newInfoToDBAction()
     {
@@ -423,9 +413,16 @@ class MembershipController extends \Core\Controller
      */
     public function withDrawPageAction()
     {
-
+        if (empty($_SESSION['userID'])) {
+            // 세션 없이 접근 Error Handling
+            View::render('Error/errorPage.php', [
+                'alert' => "잘못된 접근입니다.",
+                'back' => "ture"
+            ]);
+            exit();
+        }
         $user_id = $_SESSION['userID'];
-        $user = Membership::checkPassword($user_id);
+        $user = Membership::checkPassword($user_id); // 비밀번호 일치 검사
         $user_pw = $user['mem_password'];
         $now = (new DateTime())->format('Y-m-d H:i:s');
         $userData = [
@@ -434,24 +431,22 @@ class MembershipController extends \Core\Controller
             'mem_log_dt'    => $now,
         ];
 
-
         View::render('Membership/withdraw.php', [
             'user_id' => $userData['mem_user_id'],
             'user_pw' => $userData['mem_user_pw'],
             'log_datetime' => $userData['mem_log_dt']
         ]);
         return true;
-
     }
 
     /**
      * 회원 탈퇴 로직
-     *
      */
     public function withDrawAction()
     {
-        session_start();
-        $resultArray = ['result' => 'fail', 'alert' => '',
+        $resultArray = [
+            'result' => 'fail',
+            'alert' => '',
             'userId' => $_SESSION['userID'],
             'reason' => $_POST['reason']
         ];
@@ -475,11 +470,10 @@ class MembershipController extends \Core\Controller
         if ($deleteReturn) {
             $resultArray['result'] = 'success';
         }
-
         session_destroy();
+
         echo json_encode($resultArray);
         exit;
-
     }
 
     /**

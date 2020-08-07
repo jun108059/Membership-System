@@ -54,9 +54,7 @@ class LoginController extends \Core\Controller
             exit();
         }
         $pw_check = $user['mem_password'];
-//        $user_log = $user['mem_log_dt'];
         $status_check = $user['mem_status']; // 계정 상태 확인
-
 
         //만약 password 와 hash_pw 가 같다면 세션 실행
         if (password_verify($user_pw, $pw_check)) {
@@ -86,14 +84,13 @@ class LoginController extends \Core\Controller
             $_SESSION["userID"] = $user_id;
             $_SESSION["userLog"] = $user['mem_log_dt'];
             $_SESSION["userLevel"] = $user['mem_level'];
-            // todo session 로그추가
             if ($_SESSION["userLevel"] === '1') {
-                View::render('Admin/loginOK.html', []);
+                View::render('Admin/loginOK.html');
             } else {
-                View::render('Login/loginOK.html', []);
+                View::render('Login/loginOK.html');
             }
-        } else { // 비밀번호가 같지 않다면 알림창을 띄우고 전 페이지로 돌아갑니다
-            echo "<script>alert('❗ 아이디 또는 비밀번호를 확인하세요 ❗'); history.back();</script>";
+        } else {
+            echo "<script>alert('비밀번호를 확인하세요 ❗'); history.back();</script>";
         }
 
     }
