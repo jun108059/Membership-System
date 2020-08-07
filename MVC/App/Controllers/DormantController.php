@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\Dormant;
-use App\Models\Login;
 use App\Models\Membership;
 use App\Service\DormantNotice;
 use App\Service\MailerServiceForDormant;
@@ -14,29 +13,42 @@ use Exception;
 
 class DormantController extends \Core\Controller
 {
-    /***************************** 휴면 계정 시작 **********************************/
-
-
     /**
-     * 9일 전 휴면 계정 알림 메일 전송
-     *
+     * 30일 전 휴면 계정 알림 메일 전송 - 휴면 계정 바로 전환
      */
     public function dormantNoticeMailAction()
     {
         // 휴면 계정인지 검사한 user 데이터 가져오기
         $userRow = Dormant::getDormantUser();
         $mailType = "휴면 전환 예정 알림";
-//        print_r($userRow);
-//        exit();
         foreach ($userRow as $row) {
-            DormantNotice::mail($row['mem_email'], $row['mem_user_id']);
-//            echo("Mailer 함수 주석처리");
-//            echo ('전송완료 : '.$userID.' '.$userMail.'<br>');
+            $mailResult = DormantNotice::mail($row['mem_email'], $row['mem_user_id']);
+            if(!$mailResult) {
+                View::render('Error/errorPage.php', [
+                    'alert' => "이메일 전송에 실패했습니다. 다시 시도해주세요.",
+                    'back' => "true"
+                ]);
+                exit;
+            }
             $row['mem_dor_mail'] = 'Y';
-            // test - 바로 휴면 계정으로 전환
+            // 바로 휴면 계정으로 전환
             $row['mem_status'] = 'H';
-            Membership::emailSendLog($row, $mailType);
-            Dormant::convertDormant($row);
+            $logResult = Membership::emailSendLog($row, $mailType);
+            if(!$logResult) {
+                View::render('Error/errorPage.php', [
+                    'alert' => "이메일 전송 로그 저장 오류가 발생했습니다. 다시 시도해주세요.",
+                    'back' => "true"
+                ]);
+                exit;
+            }
+            $dormantResult = Dormant::convertDormant($row);
+            if(!$dormantResult) {
+                View::render('Error/errorPage.php', [
+                    'alert' => "휴면 전환 중 오류가 발생했습니다. 다시 시도해주세요.",
+                    'back' => "true"
+                ]);
+                exit;
+            }
         }
     }
 
@@ -46,8 +58,6 @@ class DormantController extends \Core\Controller
      */
     public function dormantReturnMailAction()
     {
-        session_start();
-
         $resultArray = ['result' => 'fail', 'alert' => ''];
 
         if(empty($_POST['email'])) {
@@ -67,8 +77,6 @@ class DormantController extends \Core\Controller
         $certify = random_int(100000, 999999); // 인증 번호 random 생성
 
         $mailReturn = MailerServiceForDormant::mail($userMail, $certify);
-//        $mailReturn = true;
-//        echo("Mailer 함수 주석처리");
 
         if ($mailReturn) {
             $resultArray['result'] = 'success';
@@ -84,8 +92,10 @@ class DormantController extends \Core\Controller
     {
         // 필수 값 검사
         if (empty($_POST['email'])) {
-            View::render('Error/errorPage.php');
-            exit;
+            View::render('Error/errorPage.php', [
+                'alert' => "잘못된 접근입니다.",
+                'back' => "true"
+            ]);
         }
         // 휴면 Table 에서 User 정보 가져오기
         $userData = Dormant::getUserInfo($_POST['email']);
@@ -102,7 +112,7 @@ class DormantController extends \Core\Controller
             if(!Dormant::deleteDormant($userData)) {
                 View::render('Error/errorPage.php', [
                     'alert' => "오류가 발생했습니다. 휴면 해제를 재시도 해주세요.",
-                    'back' => "ture"
+                    'back' => "true"
                 ]);
                 exit();
             } else {
@@ -110,7 +120,7 @@ class DormantController extends \Core\Controller
                 if(!Dormant::logDormantTable($userData, $dormantType)){
                     View::render('Error/errorPage.php', [
                         'alert' => "로그 저장 오류가 발생했습니다.",
-                        'back' => "ture"
+                        'back' => "true"
                     ]);
                     exit();
                 }
@@ -119,6 +129,4 @@ class DormantController extends \Core\Controller
         // 휴면 해제 완료 -> 로그인 페이지
         View::render('Login/index.php');
     }
-
-    /***************************** 휴면 계정 끝 **********************************/
 }

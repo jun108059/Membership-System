@@ -2,10 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\Dormant;
 use App\Models\Login;
 use App\Models\Membership;
-use App\Service\DormantNotice;
 use App\Service\MailerService;
 use \Core\View;
 use DateTime;
@@ -67,7 +65,7 @@ class MembershipController extends \Core\Controller
             // Error Handling
             View::render('Error/errorPage.php', [
                 'alert' => "이메일 정보를 입력해주세요.",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -87,7 +85,7 @@ class MembershipController extends \Core\Controller
             || empty($_POST['phone'])) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다.",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -95,7 +93,7 @@ class MembershipController extends \Core\Controller
         if (!MembershipController::passwordCheck($_POST['password'])) {
             View::render('Error/errorPage.php', [
                 'alert' => "비밀번호 형식에 맞게 입력해주세요.",
-                'back' => "ture"
+                'back' => "true"
             ]);
         }
 
@@ -122,7 +120,7 @@ class MembershipController extends \Core\Controller
         if (empty($result)){
             View::render('Error/errorPage.php', [
                 'alert' => "회원정보가 정상적으로 저장되지 않았습니다. 다시 시도해주세요.",
-                'back' => "ture"
+                'back' => "true"
             ]);
         }
 
@@ -306,7 +304,7 @@ class MembershipController extends \Core\Controller
         if(empty($_POST['user_id']) && Membership::isUserExisted($_POST['user_id'])){
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다❗",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -317,7 +315,7 @@ class MembershipController extends \Core\Controller
         if (empty($user)){
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다❗",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -339,7 +337,7 @@ class MembershipController extends \Core\Controller
         if (empty($_POST['user_id']) ) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -356,7 +354,7 @@ class MembershipController extends \Core\Controller
             // Error Handling
             View::render('Error/errorPage.php', [
                 'alert' => "비밀번호 재설정 오류가 발생했습니다. 다시 시도해주세요.",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -377,7 +375,7 @@ class MembershipController extends \Core\Controller
         if (empty($_POST['password']) || empty($_POST['name']) || empty($_POST['phone'])) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back' => "true"
             ]);
         }
 
@@ -397,7 +395,7 @@ class MembershipController extends \Core\Controller
             // Error Handling
             View::render('Error/errorPage.php', [
                 'alert' => "개인정보 변경에 실패했습니다. 다시 시도해주세요.",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -417,7 +415,7 @@ class MembershipController extends \Core\Controller
             // 세션 없이 접근 Error Handling
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다.",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 
+use App\Models\Membership;
 use \Core\View;
 use App\Models\Admin;
 use DateTime;
@@ -13,10 +14,10 @@ class AdminController extends \Core\Controller
      */
     public function indexAction()
     {
-        if (empty($_SESSION['userID']) || empty($_SESSION['userLevel']) || $_SESSION['userLevel'] !== '1'){
+        if (! $this->checkAdminLogin()) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -29,10 +30,10 @@ class AdminController extends \Core\Controller
      */
     public function allUserInfoAction()
     {
-        if(empty($_SESSION['userID']) || empty($_SESSION['userLevel']) || $_SESSION['userLevel'] !== '1') {
+        if (! $this->checkAdminLogin()) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -67,13 +68,14 @@ class AdminController extends \Core\Controller
 
     /**
      * User 회원 정보 수정 Page
+     * @return void
      */
     public function editUserAction()
     {
-        if(empty($_SESSION['userID']) || empty($_SESSION['userLevel']) || $_SESSION['userLevel'] !== '1') {
+        if (! $this->checkAdminLogin()) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back'  => "true"
             ]);
             exit();
         }
@@ -83,7 +85,7 @@ class AdminController extends \Core\Controller
         if (empty($editID)){
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -115,7 +117,7 @@ class AdminController extends \Core\Controller
         if (empty($_POST['password']) || empty($_POST['name']) || empty($_POST['phone'])) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -136,13 +138,14 @@ class AdminController extends \Core\Controller
 
     /**
      * User 강제 탈퇴!
+     * @return void
      */
     public function deleteUserAction()
     {
-        if(empty($_SESSION['userID']) || empty($_SESSION['userLevel']) || $_SESSION['userLevel'] !== '1') {
+        if (! $this->checkAdminLogin()) {  // todo
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back'  => "true"
             ]);
             exit();
         }
@@ -151,12 +154,9 @@ class AdminController extends \Core\Controller
         if(empty($delete_id)) {
             View::render('Error/errorPage.php', [
                 'alert' => "잘못된 접근입니다!",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
-        } else{
-            // 탈퇴 시킬 User 정보 불러오기
-            $edit_user = Admin::editUserData($delete_id);
         }
 
         $delete_reason = "관리자에 의한 탈퇴";
@@ -169,9 +169,20 @@ class AdminController extends \Core\Controller
         ];
 
         /** User 강제 DELETE */
-        Admin::deleteInfo($userData);
+        Membership::deleteInfo($userData);
 
         View::render('Admin/index.php');
     }
 
+    /**
+     * 관리자 로그인 체크
+     */
+    private function checkAdminLogin ()
+    {
+        if (empty($_SESSION['userID']) || empty($_SESSION['userLevel']) || $_SESSION['userLevel'] !== '1') {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -28,6 +28,7 @@ class LoginController extends \Core\Controller
 
     /**
      * Login 검사
+     * @return void
      */
     public function loginCheckAction()
     {
@@ -39,7 +40,7 @@ class LoginController extends \Core\Controller
         if (empty($user_id) || empty($user_pw)) { // empty 로 빈값 체크
             View::render('Error/errorPage.php', [
                 'alert' => "아이디 또는 패스워드 입력하세요❗",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
@@ -49,16 +50,14 @@ class LoginController extends \Core\Controller
         if (empty($user)) {
             View::render('Error/errorPage.php', [
                 'alert' => "존재하지 않는 User 입니다❗",
-                'back' => "ture"
+                'back' => "true"
             ]);
             exit();
         }
-        $pw_check = $user['mem_password'];
-        $status_check = $user['mem_status']; // 계정 상태 확인
 
         //만약 password 와 hash_pw 가 같다면 세션 실행
-        if (password_verify($user_pw, $pw_check)) {
-            if ($status_check === 'H') {
+        if (password_verify($user_pw, $user['mem_password'])) {
+            if ($user['mem_status'] === 'H') {
                 echo '<script> alert("고객님은 휴면계정입니다!🔒"); </script>';
                 $_SESSION["userID"] = $user_id;
                 $_SESSION["userEmail"] = $user['mem_email'];
@@ -68,22 +67,22 @@ class LoginController extends \Core\Controller
                 exit();
             }
             $user['mem_log_dt'] = (new DateTime())->format('Y-m-d H:i:s');
-            $logValue = "IN";
+            $logValue           = "IN";
             // 로그인 - 활동 시간 갱신
             if(Login::updateLogInDate($user)) {
                 // 로그인 성공 시 Log Table 에 삽입
                 if(!(Login::logTableInsert($user, $logValue))){
                     View::render('Error/errorPage.php', [
                         'alert' => "오류가 발생했습니다. 로그인을 다시 시도해주세요.",
-                        'back' => "ture"
+                        'back' => "true"
                     ]);
                     exit();
                 }
             }
 
-            $_SESSION["userID"] = $user_id;
-            $_SESSION["userLog"] = $user['mem_log_dt'];
-            $_SESSION["userLevel"] = $user['mem_level'];
+            $_SESSION["userID"]     = $user_id;
+            $_SESSION["userLog"]    = $user['mem_log_dt'];
+            $_SESSION["userLevel"]  = $user['mem_level'];
             if ($_SESSION["userLevel"] === '1') {
                 View::render('Admin/loginOK.html');
             } else {
@@ -101,10 +100,10 @@ class LoginController extends \Core\Controller
     public function logoutAction()
     {
         session_start();
-        $userId = $_SESSION['userID'];
-        $user = Login::getUserData($userId);
+        $userId             = $_SESSION['userID'];
+        $user               = Login::getUserData($userId);
         $user['mem_log_dt'] = (new DateTime())->format('Y-m-d H:i:s');
-        $logValue = "OUT";
+        $logValue           = "OUT";
         Login::logTableInsert($user, $logValue);
         session_destroy();
         View::render('Login/logout.html');

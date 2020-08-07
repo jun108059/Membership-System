@@ -296,6 +296,7 @@ class Membership extends \Core\Model
     /**
      * (휴면계정) 이메일 전송 기록 남기기
      * @param $userData
+     * @param $type
      * @return bool
      */
     public static function emailSendLog($userData, $type)
@@ -341,7 +342,7 @@ class Membership extends \Core\Model
 
 
     /**
-     * (삭제예정) 개인 정보 수정 - 현재 Password 일치 여부 검사
+     * 개인 정보 수정 - 현재 Password 일치 여부 검사
      * @param $userId
      * @return bool
      */
