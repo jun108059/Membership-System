@@ -55,7 +55,7 @@ class LoginController extends \Core\Controller
             exit();
         }
 
-        //만약 password 와 hash_pw 가 같다면 세션 실행
+        //만약 password 와 hash_pw 가 같은지 검사
         if (password_verify($user_pw, $user['mem_password'])) {
             // 휴면 계정인지 검사
             if ($user['mem_status'] === 'H') {
@@ -66,9 +66,9 @@ class LoginController extends \Core\Controller
                 ]);
                 exit();
             }
+            // 로그인 - 활동 시간 갱신
             $user['mem_log_dt'] = (new DateTime())->format('Y-m-d H:i:s');
             $logValue           = "IN";
-            // 로그인 - 활동 시간 갱신
             if(Login::updateLogInDate($user)) {
                 // 로그인 성공 시 Log Table 에 삽입
                 if(!(Login::logTableInsert($user, $logValue))){
