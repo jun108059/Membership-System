@@ -95,19 +95,28 @@ class AdminController extends \Core\Controller
         // 수정할 User 정보 불러오기
         $edit_user = Admin::editUserData($editID);
 
-        View::render('Admin/editForm.php', [
-            'user_id'        => $edit_user['mem_user_id'],
-            'user_email'     => $edit_user['mem_email'],
-            'user_password'  => $edit_user['mem_password'],
-            'user_status'    => $edit_user['mem_status'],
-            'user_name'      => $edit_user['mem_name'],
-            'user_phone'     => $edit_user['mem_phone'],
-            'user_gender'    => $edit_user['mem_gender'],
-            'user_level'     => $edit_user['mem_level'],
-            'user_reg_dt'    => $edit_user['mem_reg_dt'],
-            'user_log_dt'    => $edit_user['mem_log_dt'],
-            'user_pw_dt'     => $edit_user['mem_pw_dt']
-        ]);
+        if($edit_user['mem_status'] === 'N') {
+            echo "<script> alert('수정불가 - 탈퇴한 회원입니다.'); history.back();</script>";
+        }
+        else if($edit_user['mem_status'] === 'H') {
+            echo "<script> alert('수정불가 - 휴면 회원입니다.'); history.back();</script>";
+            exit();
+        }
+        else{
+            View::render('Admin/editForm.php', [
+                'user_id'        => $edit_user['mem_user_id'],
+                'user_email'     => $edit_user['mem_email'],
+                'user_password'  => $edit_user['mem_password'],
+                'user_status'    => $edit_user['mem_status'],
+                'user_name'      => $edit_user['mem_name'],
+                'user_phone'     => $edit_user['mem_phone'],
+                'user_gender'    => $edit_user['mem_gender'],
+                'user_level'     => $edit_user['mem_level'],
+                'user_reg_dt'    => $edit_user['mem_reg_dt'],
+                'user_log_dt'    => $edit_user['mem_log_dt'],
+                'user_pw_dt'     => $edit_user['mem_pw_dt']
+            ]);
+        }
     }
 
     /**
@@ -172,10 +181,12 @@ class AdminController extends \Core\Controller
         $deleteType = "F"; // 관리자 탈퇴
 
         // 회원 정보 DELETE
-        $insertResult = Dormant::insertWithdraw($userData, $deleteType);
-        $stateChange  = Dormant::stateToDelete($userData);
-        $deleteResult = Dormant::deleteUserData($userData);
-        if ($insertResult && $stateChange && $deleteResult) {
+        $insertResult  = Dormant::insertWithdraw($userData, $deleteType);
+        $stateChange   = Dormant::stateToDelete($userData);
+        $dormantDelete = Dormant::destroyDormantUser($userData);          // 휴면 계정 Table delete
+        $deleteResult  = Dormant::deleteUserData($userData);
+
+        if ($insertResult && $stateChange && $deleteResult && $dormantDelete) {
             View::render('Admin/index.php');
         }else {
             echo "<script> alert('회원 정보 삭제에서 오류가 발생하였습니다.'); history.back();</script>";
