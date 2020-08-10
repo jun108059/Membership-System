@@ -94,7 +94,7 @@ class Membership extends \Core\Model
         $row = $stmt->fetch();
         if (empty($row['mem_email'])) {
             // 휴면계정 일 경우
-            $stmt2 = $db->prepare("SELECT * FROM dormant WHERE mem_email=:email");
+            $stmt2 = $db->prepare("SELECT mem_email FROM dormant WHERE mem_email=:email");
             $stmt2->bindValue(':email', $email, PDO::PARAM_STR);
             $stmt2->execute();
             return $stmt2->rowCount() > 0;
@@ -135,9 +135,19 @@ class Membership extends \Core\Model
         $stmt->bindValue(':email', $email,PDO::PARAM_STR);
         // PDO Statement 객체가 가진 쿼리 실행
         $stmt->execute();
-        // 결과 값 가져 오기
-        $row = $stmt ->fetch();
-        return $row['mem_user_id'];
+        if($stmt->rowCount() === 0) {
+            $stmt2 = $db->prepare("SELECT mem_user_id FROM dormant WHERE mem_email=:email");
+            $stmt2->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt2->execute();
+            $row2 = $stmt2 ->fetch();
+            // DB ID 반환
+            return $row2['mem_user_id'];
+        }else {
+            // 결과 값 가져 오기
+            $row = $stmt->fetch();
+            // DB ID 반환
+            return $row['mem_user_id'];
+        }
     }
 
     /**
@@ -156,10 +166,21 @@ class Membership extends \Core\Model
         $stmt->bindValue(':email', $email,PDO::PARAM_STR);
         // PDO Statement 객체가 가진 쿼리 실행
         $stmt->execute();
-        // 결과 값 가져 오기
-        $row = $stmt ->fetch();
-        // DB name 과 입력된 name 일치 여부 반환 (T/F)
-        return $row['mem_name']===$name;
+        // DB 참조 결과 없음 = 휴면 계정
+        if($stmt->rowCount() === 0) {
+            $stmt2 = $db->prepare("SELECT mem_name FROM dormant WHERE mem_email=:email");
+            $stmt2->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt2->execute();
+            $row2 = $stmt2 ->fetch();
+            // DB name 과 입력된 name 일치 여부 반환 (T/F)
+            return $row2['mem_name']===$name;
+        }else {
+            // 결과 값 가져 오기
+            $row = $stmt->fetch();
+            return $row['mem_name'] === $name;
+            // DB name 과 입력된 name 일치 여부 반환 (T/F)
+
+        }
     }
 
     /**
@@ -315,7 +336,6 @@ class Membership extends \Core\Model
             'mem_idx'    => $userData['mem_idx'],
             'id'         => $userData['mem_user_id'],
             'send_log'   => $now,
-            'check_log'  => $now,
             'err_check'  => 'F',
             'err_detail' => 'None',
             'email_type' => $type
@@ -325,14 +345,12 @@ class Membership extends \Core\Model
                      mem_idx        = :mem_idx,
                      id             = :id,
                      send_log       = :send_log,
-                     check_log      = :check_log,
                      err_check      = :err_check,
                      err_detail     = :err_detail,
                      email_type     = :email_type
         ";
         $stmt = $db->prepare($sql);
-        $stmt->execute($bindArray);
-        return true;
+        return $stmt->execute($bindArray);
     }
 
 
