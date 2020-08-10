@@ -95,7 +95,6 @@ class Login extends \Core\Model
         $stmt = $db->prepare($sql);
         $stmt->execute($bindArray);
         return true;
-        // 에러 처리 필요
     }
 
 }

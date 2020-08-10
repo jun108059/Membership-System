@@ -136,7 +136,7 @@ class Dormant extends \Core\Model
             'mem_phone'     => Null,
             'mem_gender'    => Null,
             'mem_level'     => Null,
-            'mem_reg_dt'    => Null,
+            'mem_reg_dt'    => $user['mem_reg_dt'],
             'mem_log_dt'    => Null,
             'mem_pw_dt'     => Null,
         ];

@@ -228,7 +228,6 @@ class MembershipController extends \Core\Controller
             echo json_encode($resultArray);
             exit;
         }
-
         if (Membership::isEmailExisted($_POST['email'] . "@" . $_POST['emadress'])) {
             // 입력한 이메일 - DB에 존재 한다면
             $userMail = $_POST['email'] . "@" . $_POST['emadress'];
@@ -237,7 +236,6 @@ class MembershipController extends \Core\Controller
             // 일치 한다면
             if ($checkNameEmailRight) {
                 $userId = Membership::findId($userMail);
-                // View 페이지 렌더링 해주기
                 $resultArray['result'] = 'success';
                 $resultArray['userID'] = $userId;
                 echo json_encode($resultArray);
@@ -463,6 +461,9 @@ class MembershipController extends \Core\Controller
         $userData['reason_detail'] = $_POST['reason'];
         $userData['mem_status'] = 'N';
         $deleteType = "S"; // 스스로 탈퇴
+        // 탈퇴 시 자동 로그아웃
+        $logValue           = "OUT";
+        Login::logTableInsert($userData, $logValue);
 
         // 회원 정보 DELETE
         $insertResult = Dormant::insertWithdraw($userData, $deleteType);
