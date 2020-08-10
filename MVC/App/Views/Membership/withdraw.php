@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="change">
-    <form id="myForm" action="/Login/index" method="post" >
+    <form id="myForm" action="/" method="post" >
         <h1>❗회원 탈퇴❗</h1>
         <br>
         <input type="hidden" name="user_id" id="user_id" value="<?php echo($user_id)?>">

@@ -15,8 +15,10 @@ $_SESSION["userLog"] = (new DateTime())->format('Y-m-d H:i:s');
 </head>
 <body>
 <h1>멤버쉽 시스템 Home</h1>
-<!--<p>안녕하세요! <span id="name"></span> 님 멤버쉽 서비스입니다.</p>-->
-<p>hi ! <?php echo "<h2> {$_SESSION['userID']} 님 환영합니다😄</h2>"?></p>
+<p><?php echo "<h2> {$_SESSION['userID']} 님 환영합니다😄</h2>"?></p>
+
+<img src="/public/image/saramin.PNG" alt="사람인 HR">
+
 <br><br>
 <a href="/Home/infoModify"><input type="button" value="개인정보수정" /></a>
 <a href="/Login/logout"><input type="button" value="로그아웃" /></a>

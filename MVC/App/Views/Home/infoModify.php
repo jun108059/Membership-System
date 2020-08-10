@@ -1,6 +1,7 @@
 <?php
 if (!isset($_SESSION['userID'])) {
     echo '<script> alert("🧨잘못된 접근입니다.(home/index.php)"); history.back(); </script>';
+//    echo "<meta http-equiv='refresh' content='0; url=/'>";
     exit;
 }
 ?>
@@ -17,7 +18,7 @@ if (!isset($_SESSION['userID'])) {
     <input type="hidden" name="user_id" id="user_id" value="<?php echo($user_id) ?>">
     <input type="hidden" name="user_pw" id="user_pw" value="<?php echo($user_pw) ?>">
     <input type="hidden" name="user_name" id="user_name" value="<?php echo($user_name) ?>">
-    <input type="hidden" name="phone" id="phone" value="<?php echo($phone) ?>">
+    <input type="hidden" name="curr_phone" id="curr_phone" value="<?php echo($phone) ?>">
     <input type="hidden" name="gender" id="gender" value="<?php echo($gender) ?>">
     <input type="hidden" name="register" id="register" value="<?php echo($register) ?>">
     <input type="hidden" name="email" id="email" value="<?php echo($email) ?>">
@@ -191,7 +192,6 @@ if (!isset($_SESSION['userID'])) {
             }
 
             var inputPhone = $("#phone").val();
-            console.log(inputPhone);
             $.ajax({
                 url: "/Membership/checkPhone",
                 method: 'POST',

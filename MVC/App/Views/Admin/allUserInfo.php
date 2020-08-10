@@ -12,16 +12,7 @@ include('head.php');
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <style>
         a { text-decoration: none; }
-        .pagenum {
-            display: inline-block; width: 25px;
-            border: 1px solid transparent;
-            color: gray; font-weight: bold;
-            text-decoration: none; text-align: center;
-        }
-        .pagenum:hover { color: orange; border: 1px solid orange; }
-        .pagenum.current { color: orange; text-decoration: underline; }
         .move_btn { color: gray; }
-        .disabled { color: silver; }
         .paging_area { text-align: center; }
     </style>
 </head>

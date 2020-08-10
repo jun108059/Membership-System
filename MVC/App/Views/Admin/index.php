@@ -45,5 +45,7 @@ include('head.php');
         </table>
     </div>
 
+    <img src="/public/image/saramin.PNG" alt="사람인 HR">
+
 </body>
 </html>

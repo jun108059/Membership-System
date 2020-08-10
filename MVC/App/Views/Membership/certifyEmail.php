@@ -23,7 +23,7 @@
                     @
                     <select name="emadress" id="emadress">
                         <option value="naver.com">naver.com</option>
-                        <option value="google.com">google.com</option>
+                        <option value="gmail.com">gmail.com</option>
                     </select>
                     <br><br>
                 </td>

@@ -13,7 +13,7 @@
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="https://github.com/jun108059/Membership-System/tree/master/membership">Membership</a>
+            <a class="navbar-brand" href="https://github.com/jun108059/Membership-System">Membership</a>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/Admin/index">메인</a></li>
                 <?php if (isset($_SESSION['userID'])) { ?>
