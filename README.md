@@ -1,6 +1,6 @@
 <p align="center">
-    <img width="100px" src="/img/Logo.PNG" align="center" alt="Membership" />
-    <h2 align="center">💳PHP membership system</h2>
+    <img width="300px" src="/img/Logo.PNG" align="center" alt="Membership" />
+    <h2 align="center">PHP membership system</h2>
     <p align="center">It is a Membership system that implements only essential functions!</p>
 </p>
 
